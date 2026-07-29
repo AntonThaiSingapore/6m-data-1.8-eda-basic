@@ -1,1284 +1,915 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>EDA Basic Concepts — Interactive Visualisations</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>From Business Problem to Decision — Concept Map (Lessons 1.8–1.10)</title>
 <style>
   :root {
-    --bg: #0e1116;
-    --panel: #171b22;
-    --panel-2: #1f242d;
-    --border: #2a313c;
-    --text: #e6e9ef;
-    --muted: #9aa3b2;
-    --accent: #6ad0f0;
-    --accent-2: #f0a96a;
-    --good: #6ee7a3;
-    --bad: #ef6a6a;
-    --shadow: 0 6px 24px rgba(0,0,0,.4);
+    --bg: #0f1220;
+    --panel: #171a2e;
+    --panel-2: #1f2340;
+    --ink: #e7e9f7;
+    --ink-dim: #9aa0c3;
+    --rule: #2a2f55;
+    --accent: #ffd166;
+    --accent-2: #ef476f;
+    --accent-3: #06d6a0;
+    --accent-4: #118ab2;
+    --muted: #3b4170;
+    --code-bg: #0b0e1c;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    --font-mono: "SF Mono", "JetBrains Mono", "Menlo", Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg); color: var(--text);
-    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  header {
-    padding: 22px 28px 8px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, #131820, #0e1116);
-  }
-  header h1 { margin: 0 0 4px; font-size: 22px; font-weight: 700; letter-spacing: .2px; }
-  header h1 .pill {
-    display: inline-block; vertical-align: middle;
-    background: var(--accent); color: #0a1218;
-    border-radius: 999px; font-size: 11px; font-weight: 700;
-    padding: 3px 10px; margin-left: 10px; letter-spacing: .5px;
-  }
-  header p { margin: 0; color: var(--muted); font-size: 13px; }
-  nav.tabs {
-    display: flex; flex-wrap: wrap; gap: 4px;
-    padding: 12px 18px 0; background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 10;
-  }
-  nav.tabs button {
-    background: transparent; color: var(--muted);
-    border: 1px solid transparent; border-bottom: none;
-    border-radius: 8px 8px 0 0; padding: 10px 14px; cursor: pointer;
-    font: inherit; font-size: 13px; font-weight: 600;
-    transition: background .15s, color .15s, border-color .15s;
-  }
-  nav.tabs button:hover { color: var(--text); background: rgba(255,255,255,.03); }
-  nav.tabs button.active {
-    color: var(--accent); background: var(--panel);
-    border-color: var(--border); border-bottom-color: var(--panel);
-    margin-bottom: -1px;
-  }
-  main { padding: 24px clamp(16px, 4vw, 48px) 80px; max-width: 1200px; margin: 0 auto; }
-  section.tab { display: none; }
-  section.tab.active { display: block; animation: fadeIn .25s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-  h2.section-title { font-size: 20px; margin: 0 0 4px; }
-  p.lede { color: var(--muted); margin: 0 0 18px; max-width: 820px; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: var(--font-sans); }
+  body { min-height: 100vh; padding: 32px 20px 80px; }
+  .wrap { max-width: 1180px; margin: 0 auto; }
 
-  /* ==== DataFrame styling ==== */
-  .df-wrap { overflow-x: auto; padding: 4px; }
-  table.df {
-    border-collapse: separate; border-spacing: 0;
-    background: var(--panel); border: 1px solid var(--border);
-    border-radius: 10px; overflow: hidden;
-    font-variant-numeric: tabular-nums; font-size: 13px;
-  }
-  table.df th, table.df td {
-    padding: 8px 13px; text-align: left;
-    border-bottom: 1px solid var(--border);
-    border-right: 1px solid var(--border);
-    transition: background .2s, opacity .3s;
-  }
-  table.df th { background: var(--panel-2); font-weight: 700; }
-  table.df th.idx-h, table.df td.idx { background: var(--panel-2); color: var(--accent); font-weight: 700; }
-  table.df th.idx-h { color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
-  table.df tr:last-child td { border-bottom: none; }
-  table.df th:last-child, table.df td:last-child { border-right: none; }
-  table.df td.num { text-align: right; }
-  table.df td.nan { color: var(--bad); font-style: italic; }
-  table.df .dtype {
-    display: block; color: var(--muted); font-size: 10px; font-weight: 500;
-    letter-spacing: .5px; margin-top: 3px; text-transform: lowercase;
-  }
-  table.df td.hl, table.df th.hl { background: rgba(106,208,240,.18); }
-  table.df td.warn { background: rgba(239,106,106,.16); }
-  table.df td.fixed { background: rgba(110,231,163,.14); color: var(--good); }
-  table.df tr.faded td { opacity: .22; }
+  header { text-align: center; margin-bottom: 20px; }
+  header h1 { font-size: clamp(28px, 4.6vw, 44px); margin: 0; letter-spacing: -0.02em; font-weight: 700; }
+  header h1 em { color: var(--accent); font-style: italic; }
+  header .subtitle { color: var(--ink-dim); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 10px; }
 
-  /* ==== Cards / panels ==== */
-  .row { display: flex; gap: 18px; flex-wrap: wrap; align-items: flex-start; }
-  .col { flex: 1 1 320px; min-width: 0; }
-  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-  .panel h3 { margin: 0 0 10px; font-size: 14px; color: var(--accent); }
-  .panel.dim { background: var(--panel-2); }
-  .panel + .panel { margin-top: 14px; }
+  nav.tabs { display: flex; justify-content: center; gap: 8px; margin: 26px 0 32px; flex-wrap: wrap; }
+  nav.tabs button { background: var(--panel); color: var(--ink-dim); border: 1px solid var(--rule); padding: 10px 18px; border-radius: 999px; font: 500 14px var(--font-sans); cursor: pointer; transition: all 0.15s; }
+  nav.tabs button:hover { color: var(--ink); border-color: var(--muted); }
+  nav.tabs button.active { background: var(--accent); color: #1a1404; border-color: var(--accent); }
 
-  /* ==== Buttons / inputs ==== */
-  .btn {
-    background: var(--panel-2); color: var(--text);
-    border: 1px solid var(--border); border-radius: 6px;
-    padding: 8px 12px; font: inherit; font-size: 12px; font-weight: 600;
-    cursor: pointer; transition: background .15s, border-color .15s, color .15s;
-  }
-  .btn:hover { background: #2a313c; border-color: var(--accent); }
-  .btn.on { background: var(--accent); color: #0a1218; border-color: var(--accent); }
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  input.code, textarea.code {
-    width: 100%; background: #0a0e14; color: var(--text);
-    border: 1px solid var(--border); border-radius: 6px; padding: 10px;
-    font: 13px/1.5 "SF Mono", "Menlo", "Consolas", monospace; resize: vertical;
-  }
-  input.code:focus, textarea.code:focus { outline: 1px solid var(--accent); border-color: var(--accent); }
-  pre.out {
-    margin: 10px 0 0; padding: 12px;
-    background: #0a0e14; border-radius: 6px; border: 1px dashed var(--border);
-    font: 12.5px/1.55 "SF Mono", "Menlo", "Consolas", monospace;
-    color: var(--good); white-space: pre; overflow-x: auto; min-height: 1.5em;
-  }
-  pre.out.err { color: var(--bad); }
-  pre.raw {
-    margin: 0; padding: 12px; background: #0a0e14; border-radius: 6px;
-    border: 1px solid var(--border);
-    font: 12.5px/1.55 "SF Mono", monospace; color: var(--muted);
-    white-space: pre; overflow-x: auto;
-  }
-  label.chk {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 12.5px; color: var(--muted); margin-bottom: 8px; cursor: pointer;
-  }
-  label.chk code { color: var(--accent); }
-  code { background: rgba(255,255,255,.05); padding: 1px 5px; border-radius: 4px; font-family: "SF Mono", monospace; font-size: .92em; }
+  section.part { display: none; }
+  section.part.active { display: block; animation: fade 0.3s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
-  /* ==== Misc ==== */
-  .annotation {
-    color: var(--muted); font-size: 12.5px; font-style: italic;
-    margin: 10px 0 0; padding-left: 12px; border-left: 2px solid var(--accent);
-  }
-  .callout { border-color: var(--accent-2); background: rgba(240,169,106,.06); }
-  .callout h3 { color: var(--accent-2); }
-  ul.tight { margin: 0; padding-left: 18px; color: var(--muted); font-size: 13px; }
-  ul.tight li { margin-bottom: 5px; }
-  ul.tight strong { color: var(--text); }
-  input[type=range] {
-    width: 100%; -webkit-appearance: none; appearance: none; height: 6px;
-    border-radius: 3px; background: var(--panel-2); outline: none;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none; width: 18px; height: 18px;
-    border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg);
-  }
-  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
-  .stat {
-    background: var(--panel-2); border: 1px solid var(--border);
-    border-radius: 8px; padding: 10px 12px;
-  }
-  .stat .k { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; }
-  .stat .v { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .stat .v.changed { color: var(--accent-2); }
-  footer { color: var(--muted); font-size: 12px; padding: 24px 28px; border-top: 1px solid var(--border); text-align: center; }
-  svg text { font-family: "SF Mono", monospace; }
+  .part-label { color: var(--ink-dim); letter-spacing: 0.12em; text-transform: uppercase; font-size: 12px; margin-bottom: 8px; }
+  h2.headline { font-size: clamp(22px, 3.2vw, 34px); margin: 0 0 12px; font-weight: 600; letter-spacing: -0.01em; }
+  h2.headline em { color: var(--accent); font-style: italic; }
+  p.intro { color: var(--ink-dim); font-size: 16px; line-height: 1.6; max-width: 820px; margin: 0 0 24px; }
+  p.intro code, .why code { color: var(--ink); background: var(--code-bg); padding: 2px 6px; border-radius: 4px; font: 13px var(--font-mono); }
+
+  .scenario { background: linear-gradient(135deg, rgba(6, 214, 160, 0.08), rgba(17, 138, 178, 0.08)); border: 1px solid rgba(6, 214, 160, 0.2); border-radius: 10px; padding: 14px 18px; margin-bottom: 22px; font-size: 14px; line-height: 1.6; color: var(--ink); }
+  .scenario strong { color: var(--accent-3); }
+
+  .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .presets button { background: var(--panel-2); color: var(--ink); border: 1px solid var(--rule); padding: 9px 14px; border-radius: 8px; font: 500 13px var(--font-sans); cursor: pointer; transition: all 0.15s; text-align: left; }
+  .presets button:hover { background: var(--muted); border-color: var(--accent); }
+  .presets button.on { background: var(--accent); color: #1a1404; border-color: var(--accent); }
+
+  .panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+  .panel h3 { margin: 0 0 16px; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-dim); font-weight: 600; }
+
+  /* ---- Concept map ---- */
+  .map { display: flex; align-items: stretch; gap: 0; overflow-x: auto; padding: 6px 2px 10px; }
+  .stage { flex: 1 1 0; min-width: 172px; background: var(--panel-2); border: 1px solid var(--rule); border-radius: 12px; padding: 14px; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 8px; }
+  .stage:hover { border-color: var(--muted); transform: translateY(-2px); }
+  .stage.sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 6px 20px rgba(255,209,102,0.16); }
+  .stage.route { background: rgba(255,209,102,0.10); border-color: var(--accent); }
+  .stage.dim { opacity: 0.32; }
+  .stage .snum { font: 700 11px var(--font-mono); color: var(--accent); letter-spacing: 0.1em; }
+  .stage .stitle { font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .stage .sq { font-size: 12px; color: var(--ink-dim); line-height: 1.45; font-style: italic; }
+  .stage .slesson { margin-top: auto; font: 600 10px var(--font-mono); letter-spacing: 0.06em; color: var(--accent-4); background: rgba(17,138,178,0.14); border: 1px solid rgba(17,138,178,0.3); border-radius: 999px; padding: 3px 8px; align-self: flex-start; }
+  .stage .slesson.soft { color: var(--ink-dim); background: transparent; border-color: var(--rule); }
+  .arrow { flex: 0 0 26px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 20px; }
+  .arrow.route { color: var(--accent); }
+
+  .loopback { text-align: center; color: var(--ink-dim); font-size: 12px; margin-top: 6px; letter-spacing: 0.04em; }
+
+  /* ---- Chips ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { background: var(--panel-2); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 12px; font: 500 13px var(--font-mono); color: var(--ink); cursor: pointer; transition: all 0.15s; }
+  .chip:hover { border-color: var(--accent); }
+  .chip.sel { background: var(--accent); color: #1a1404; border-color: var(--accent); }
+  .chip.route { border-color: var(--accent); color: var(--accent); }
+  .chip.dim { opacity: 0.3; }
+
+  .code-line { background: var(--code-bg); border-radius: 8px; padding: 13px 16px; font: 500 14px var(--font-mono); margin: 6px 0 14px; border-left: 3px solid var(--accent); overflow-x: auto; color: var(--accent); white-space: pre-wrap; }
+  .why { font-size: 14px; line-height: 1.65; color: var(--ink); }
+  .why .tag { display: inline-block; font: 600 10px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-dim); margin: 12px 0 4px; }
+  .why .sc { color: var(--accent-3); }
+
+  .result-label { color: var(--ink-dim); font-size: 12px; margin: 14px 0 8px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* ---- Cell strip (1.8 tab) ---- */
+  .table-wrap { overflow-x: auto; }
+  table.rows { border-collapse: separate; border-spacing: 3px; font: 500 13px var(--font-mono); }
+  table.rows th { font: 600 10px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-dim); padding: 4px 8px; text-align: left; white-space: nowrap; }
+  table.rows td { background: var(--panel-2); border: 1px solid var(--rule); border-radius: 6px; padding: 7px 10px; white-space: nowrap; transition: all 0.2s; }
+  table.rows tr.bad td { background: var(--accent-2); border-color: var(--accent-2); color: #fff; }
+  table.rows td.badcell { background: var(--accent-2); border-color: var(--accent-2); color: #fff; font-weight: 700; }
+  table.rows tr.fixed td { background: var(--accent-3); border-color: var(--accent-3); color: #083024; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; font-size: 13px; color: var(--ink-dim); }
+  .legend .swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+
+  /* ---- Pivot grid (1.9 tab) ---- */
+  table.matrix { border-collapse: separate; border-spacing: 4px; font: 500 14px var(--font-mono); }
+  table.matrix td { background: var(--panel-2); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 14px; text-align: right; min-width: 74px; }
+  table.matrix td.hdr { background: transparent; border-color: transparent; color: var(--ink-dim); font: 600 11px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; text-align: center; }
+  table.matrix td.rowhdr { background: transparent; border-color: transparent; color: var(--ink-dim); font: 600 11px var(--font-mono); text-align: right; text-transform: uppercase; letter-spacing: 0.06em; }
+  table.matrix td.val { background: var(--accent); color: #1a1404; border-color: var(--accent); font-weight: 700; }
+  table.matrix td.marg { background: rgba(17,138,178,0.2); border-color: var(--accent-4); color: var(--ink); }
+
+  .input-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .input-row label { font: 600 11px var(--font-mono); color: var(--ink-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+  select { background: var(--code-bg); color: var(--accent); border: 1px solid var(--rule); padding: 8px 10px; border-radius: 8px; font: 500 14px var(--font-mono); }
+  select:focus { outline: none; border-color: var(--accent); }
+
+  .two { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 940px) { .two { grid-template-columns: 1.05fr 1fr; } }
+
+  .sketch { background: var(--code-bg); border: 1px solid var(--rule); border-radius: 10px; padding: 12px; }
+
+  footer { margin-top: 56px; text-align: center; color: var(--ink-dim); font-size: 12px; letter-spacing: 0.06em; line-height: 1.8; }
+  footer .dot { color: var(--accent); }
 </style>
 </head>
 <body>
+<div class="wrap">
 
-<header>
-  <h1>EDA Basic — Core Concepts <span class="pill">interactive</span></h1>
-  <p>Companion visualisations for Lesson 1.8. Every panel is live — change a parameter and watch the DataFrame respond. No prior knowledge assumed.</p>
-</header>
+  <header>
+    <h1>From Business Problem to <em>Decision</em></h1>
+    <div class="subtitle">Concept map · Lessons 1.8 · 1.9 · 1.10 · Live teaching aid</div>
+  </header>
 
-<nav class="tabs" id="tabs">
-  <button class="active" data-tab="what">0. What is EDA?</button>
-  <button data-tab="health">1. Health Check</button>
-  <button data-tab="missing">2. Missing Data</button>
-  <button data-tab="dupes">3. Duplicates</button>
-  <button data-tab="outliers">4. Outliers</button>
-  <button data-tab="transform">5. Transform &amp; Regex</button>
-  <button data-tab="io">6. Reading Files</button>
-</nav>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="p1">The Map</button>
+    <button class="tab-btn" data-tab="p2">1.8 — Can I trust it?</button>
+    <button class="tab-btn" data-tab="p3">1.9 — What's the pattern?</button>
+    <button class="tab-btn" data-tab="p4">1.10 — Make them act</button>
+  </nav>
 
-<main>
-
-<!-- ============================== TAB 0 ============================== -->
-<section class="tab active" id="what">
-  <h2 class="section-title">0 · What is EDA, and why do it first?</h2>
-  <p class="lede"><strong>Exploratory Data Analysis</strong> is the interview you conduct with a dataset before you trust it. Like a doctor's check-up: read the vitals before diagnosing anything. Every chart, model, or conclusion built on unchecked data inherits the data's problems silently.</p>
-
-  <div class="row">
-    <div class="col">
-      <div class="panel">
-        <h3>The three questions EDA answers</h3>
-        <ul class="tight">
-          <li><strong>Check assumptions</strong> — is the data what you think it is? Right number of rows, right types, right range?</li>
-          <li><strong>Spot anomalies</strong> — missing values, duplicate records, impossible numbers (an age of 200).</li>
-          <li><strong>Find patterns</strong> — what does a typical row look like, and what's rare?</li>
-        </ul>
-      </div>
-      <div class="panel callout">
-        <h3>⚠️ Why it matters — a one-row demo</h3>
-        <p style="margin:0 0 10px; font-size:13px; color:var(--muted);">Same 6 ages. One dataset has a typo (an extra zero). Watch what the average does.</p>
-        <div class="btn-row">
-          <button class="btn on" id="whyClean">Clean data</button>
-          <button class="btn" id="whyDirty">One typo: 22 → 220</button>
-        </div>
-        <pre class="out" id="whyOut"></pre>
-        <p class="annotation">The mean jumps by 33 years. The median barely moves. That gap is the whole reason we inspect before we compute.</p>
-      </div>
-    </div>
-
-    <div class="col">
-      <div class="panel">
-        <h3>The workflow for today</h3>
-        <ol style="margin:0; padding-left:20px; color:var(--muted); font-size:13px;">
-          <li style="margin-bottom:6px;"><strong style="color:var(--text)">Load</strong> — read the file correctly (tab 6).</li>
-          <li style="margin-bottom:6px;"><strong style="color:var(--text)">Health check</strong> — <code>.shape</code>, <code>.info()</code>, <code>.describe()</code>, <code>.value_counts()</code> (tab 1).</li>
-          <li style="margin-bottom:6px;"><strong style="color:var(--text)">Clean</strong> — missing values (tab 2), duplicates (tab 3), outliers (tab 4).</li>
-          <li style="margin-bottom:6px;"><strong style="color:var(--text)">Transform</strong> — fix types, map categories, clean text with regex (tab 5).</li>
-          <li><strong style="color:var(--text)">Export</strong> — save the cleaned result so you never redo this work.</li>
-        </ol>
-      </div>
-      <div class="panel">
-        <h3>Vocabulary you'll need</h3>
-        <ul class="tight">
-          <li><strong>DataFrame</strong> — a table. Rows have an <em>index</em>, columns have names.</li>
-          <li><strong>Series</strong> — one column of a DataFrame.</li>
-          <li><strong>NaN</strong> — "Not a Number": pandas' marker for a missing value.</li>
-          <li><strong>dtype</strong> — the type of a column: <code>int64</code>, <code>float64</code>, <code>object</code> (text).</li>
-          <li><strong>Numerical vs categorical</strong> — numbers you do maths on vs labels you count.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================== TAB 1 ============================== -->
-<section class="tab" id="health">
-  <h2 class="section-title">1 · The Health Check — <code>.info()</code>, <code>.describe()</code>, <code>.value_counts()</code></h2>
-  <p class="lede">You've just been handed this table. Before analysing anything, run the vitals. Click each method to see exactly what it reports — and note which parts of the table it looks at.</p>
-
-  <div class="row">
-    <div class="col" style="flex: 1.2 1 420px;">
-      <div class="panel">
-        <h3>The dataset — <code>df</code></h3>
-        <div class="df-wrap"><table class="df" id="healthTable"></table></div>
-        <p class="annotation">Two numeric columns (<code>age</code>, <code>score</code>), two text columns (<code>name</code>, <code>city</code>), and three missing values scattered about.</p>
-      </div>
-    </div>
-    <div class="col">
-      <div class="panel">
-        <h3>Run a method</h3>
-        <div class="btn-row" id="healthBtns">
-          <button class="btn on" data-m="shape">df.shape</button>
-          <button class="btn" data-m="dtypes">df.dtypes</button>
-          <button class="btn" data-m="info">df.info()</button>
-          <button class="btn" data-m="describe">df.describe()</button>
-          <button class="btn" data-m="describeObj">df.describe(include="object")</button>
-          <button class="btn" data-m="vc">df["city"].value_counts()</button>
-          <button class="btn" data-m="isna">df.isna().sum()</button>
-        </div>
-        <pre class="out" id="healthOut"></pre>
-        <p class="annotation" id="healthNote"></p>
-      </div>
-    </div>
-  </div>
-
-  <div class="row" style="margin-top:18px;">
-    <div class="col">
-      <div class="panel">
-        <h3>Reading <code>.describe()</code> — what each row means</h3>
-        <ul class="tight">
-          <li><strong>count</strong> — how many <em>non-missing</em> values. If this is below the row count, you have NaNs.</li>
-          <li><strong>mean</strong> — the average. Sensitive to outliers.</li>
-          <li><strong>std</strong> — standard deviation: typical distance from the mean. Big std = spread out.</li>
-          <li><strong>min / max</strong> — the extremes. Sanity-check these first: negative ages? 200-year-olds?</li>
-          <li><strong>25% / 50% / 75%</strong> — quartiles. The 50% is the <strong>median</strong>: half the data sits below it.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="col">
-      <div class="panel callout">
-        <h3>Mean vs median — drag the outlier</h3>
-        <p style="margin:0 0 10px; font-size:13px; color:var(--muted);">Five values: 10, 12, 14, 16, and one you control. Watch which statistic follows the outlier.</p>
-        <input type="range" id="mmSlider" min="10" max="200" value="18" step="1" />
-        <div class="stat-grid" style="margin-top:12px;">
-          <div class="stat"><div class="k">5th value</div><div class="v" id="mmVal">18</div></div>
-          <div class="stat"><div class="k">mean</div><div class="v changed" id="mmMean"></div></div>
-          <div class="stat"><div class="k">median</div><div class="v" id="mmMedian"></div></div>
-        </div>
-        <p class="annotation">The median is <strong>robust</strong> — it ignores how extreme the extreme value is. Use it when outliers are present.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================== TAB 2 ============================== -->
-<section class="tab" id="missing">
-  <h2 class="section-title">2 · Missing Data — drop it or fill it?</h2>
-  <p class="lede">Missing values appear as <code style="color:var(--bad)">NaN</code>. You have two families of fixes: <strong>drop</strong> (lose rows, keep honesty) or <strong>fill / impute</strong> (keep rows, introduce a guess). Pick an operation and compare before/after.</p>
-
-  <div class="panel">
-    <h3>Choose an operation</h3>
-    <div class="btn-row" id="naBtns">
-      <button class="btn on" data-op="none">original</button>
-      <button class="btn" data-op="isna">df.isna()</button>
-      <button class="btn" data-op="dropna">df.dropna()</button>
-      <button class="btn" data-op="dropall">df.dropna(how="all")</button>
-      <button class="btn" data-op="dropcol">df.dropna(axis="columns", how="all")</button>
-      <button class="btn" data-op="thresh">df.dropna(thresh=2)</button>
-      <button class="btn" data-op="fill0">df.fillna(0)</button>
-      <button class="btn" data-op="filldict">df.fillna({1: 0.5, 2: 0})</button>
-      <button class="btn" data-op="ffill">df.ffill()</button>
-      <button class="btn" data-op="bfill">df.bfill()</button>
-      <button class="btn" data-op="mean">df.fillna(df.mean())</button>
-    </div>
-  </div>
-
-  <div class="row" style="margin-top:14px;">
-    <div class="col">
-      <div class="panel">
-        <h3>Before <span style="color:var(--muted); font-weight:400; font-size:12px;">(faded rows disappear)</span></h3>
-        <div class="df-wrap"><table class="df" id="naBefore"></table></div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="panel">
-        <h3>After — <span style="font-family:'SF Mono',monospace; color:var(--accent-2);" id="naExpr">df</span></h3>
-        <div class="df-wrap"><table class="df" id="naAfter"></table></div>
-        <div class="stat-grid" style="margin-top:12px;">
-          <div class="stat"><div class="k">rows kept</div><div class="v" id="naRows"></div></div>
-          <div class="stat"><div class="k">cols kept</div><div class="v" id="naCols"></div></div>
-          <div class="stat"><div class="k">NaNs left</div><div class="v" id="naCount"></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <p class="annotation" id="naNote"></p>
-
-  <div class="row" style="margin-top:18px;">
-    <div class="col">
-      <div class="panel">
-        <h3>How to choose</h3>
-        <ul class="tight">
-          <li><strong>dropna()</strong> — default drops a row if <em>any</em> value is missing. Aggressive; can wipe most of a wide table.</li>
-          <li><strong>how="all"</strong> — only drop rows that are entirely empty. Safe cleanup.</li>
-          <li><strong>thresh=n</strong> — keep rows with at least <em>n</em> real values. The middle ground.</li>
-          <li><strong>fillna(value)</strong> — a constant. Careful: filling with 0 pretends a missing measurement was zero.</li>
-          <li><strong>ffill / bfill</strong> — carry the neighbouring value. Natural for time series, wrong for unordered rows.</li>
-          <li><strong>fillna(mean)</strong> — imputation. Preserves the column average but shrinks its variance.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="col">
-      <div class="panel callout">
-        <h3>Ask "why is it missing?" before you fix it</h3>
-        <p style="margin:0; font-size:13px; color:var(--muted);">
-          If values are missing <strong>at random</strong> (someone skipped a form field), mean-imputation is usually harmless.
-          If missingness is <strong>systematic</strong> — e.g. every international student left "age" blank — the global mean imports a bias into a whole subgroup.
-          Dropping 5% of rows is often fine; dropping 40% gives you a different dataset.
-        </p>
-        <p class="annotation">There is no universally correct answer. There is only a decision you can defend.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================== TAB 3 ============================== -->
-<section class="tab" id="dupes">
-  <h2 class="section-title">3 · Duplicates — the double-counting trap</h2>
-  <p class="lede">A customer clicks "submit" twice and your sales total is wrong. <code>duplicated()</code> flags every row that has been <em>seen before</em>; <code>drop_duplicates()</code> removes those flagged rows. What counts as "the same row" is up to you — choose the columns.</p>
-
-  <div class="row">
-    <div class="col">
-      <div class="panel">
-        <h3>Controls</h3>
-        <p style="margin:0 0 8px; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px;">subset — columns to compare</p>
-        <div class="btn-row" id="dupSubset">
-          <button class="btn on" data-c="k1">k1</button>
-          <button class="btn on" data-c="k2">k2</button>
-          <button class="btn" data-c="v1">v1</button>
-        </div>
-        <p style="margin:10px 0 8px; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.8px;">keep — which copy survives</p>
-        <div class="btn-row" id="dupKeep">
-          <button class="btn on" data-k="first">"first"</button>
-          <button class="btn" data-k="last">"last"</button>
-          <button class="btn" data-k="none">False (drop all copies)</button>
-        </div>
-        <pre class="out" id="dupExpr"></pre>
-        <div class="stat-grid" style="margin-top:12px;">
-          <div class="stat"><div class="k">rows in</div><div class="v">7</div></div>
-          <div class="stat"><div class="k">flagged</div><div class="v changed" id="dupFlagged"></div></div>
-          <div class="stat"><div class="k">rows out</div><div class="v" id="dupOut"></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="col" style="flex:1.3 1 420px;">
-      <div class="panel">
-        <h3><code>duplicated()</code> — the boolean flag per row</h3>
-        <div class="df-wrap"><table class="df" id="dupTable"></table></div>
-        <p class="annotation">Red rows are duplicates under the current <code>subset</code>. They are gone from the table below.</p>
-      </div>
-      <div class="panel">
-        <h3><code>drop_duplicates()</code> — the survivors</h3>
-        <div class="df-wrap"><table class="df" id="dupResult"></table></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel callout" style="margin-top:18px;">
-    <h3>The subtlety worth remembering</h3>
-    <p style="margin:0; font-size:13px; color:var(--muted);">
-      Turn on <code>v1</code> above and every row becomes unique — because <code>v1</code> is a counter, so no two rows ever match.
-      That's the trap: including an ID-like column in <code>subset</code> silently disables duplicate detection.
-      Compare only the columns that define <em>identity</em> for your problem (customer + timestamp + amount), never the auto-increment key.
+  <!-- ================= PART 1: THE MAP ================= -->
+  <section class="part active" id="p1">
+    <div class="part-label">Part 1 — The whole journey on one screen</div>
+    <h2 class="headline">A business problem is solved in <em>five moves</em>, not five hundred.</h2>
+    <p class="intro">
+      Lessons 1.8, 1.9 and 1.10 are not three unrelated toolkits. They are three consecutive stages of
+      one journey that starts with a question from your boss and ends with a decision. Click any stage
+      to see its tools — or pick a real business question below and watch the map light up the route.
     </p>
-  </div>
-</section>
 
-
-<!-- ============================== TAB 4 ============================== -->
-<section class="tab" id="outliers">
-  <h2 class="section-title">4 · Outliers — flag, cap, or drop</h2>
-  <p class="lede">An outlier is a value far from the rest. A patient aged 150 is <em>technically valid</em> and <em>obviously impossible</em>. Two standard ways to find them: the <strong>standard-deviation rule</strong> and the <strong>IQR rule</strong>. Then three choices: keep, cap, or remove.</p>
-
-  <div class="row">
-    <div class="col">
-      <div class="panel">
-        <h3>Detection rule</h3>
-        <div class="btn-row" id="olRule">
-          <button class="btn on" data-r="std">|value| &gt; k × std</button>
-          <button class="btn" data-r="iqr">IQR rule</button>
-        </div>
-        <div style="display:flex; gap:14px; align-items:center; margin-top:6px;">
-          <span style="font-size:13px; color:var(--muted); white-space:nowrap;">k =</span>
-          <input type="range" id="olK" min="1" max="4" value="3" step="0.1" />
-          <span id="olKVal" style="font-family:'SF Mono',monospace; font-size:16px; color:var(--accent); min-width:34px; text-align:right;">3.0</span>
-        </div>
-        <pre class="out" id="olExpr"></pre>
-      </div>
-      <div class="panel">
-        <h3>Treatment</h3>
-        <div class="btn-row" id="olAction">
-          <button class="btn on" data-a="flag">flag only</button>
-          <button class="btn" data-a="cap">cap at the bound</button>
-          <button class="btn" data-a="drop">drop the rows</button>
-        </div>
-        <div class="stat-grid">
-          <div class="stat"><div class="k">n</div><div class="v" id="olN"></div></div>
-          <div class="stat"><div class="k">outliers</div><div class="v changed" id="olCount"></div></div>
-          <div class="stat"><div class="k">mean</div><div class="v" id="olMean"></div></div>
-          <div class="stat"><div class="k">std</div><div class="v" id="olStd"></div></div>
-          <div class="stat"><div class="k">min</div><div class="v" id="olMin"></div></div>
-          <div class="stat"><div class="k">max</div><div class="v" id="olMax"></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="col" style="flex:1.4 1 460px;">
-      <div class="panel">
-        <h3>1000 values drawn from a normal distribution</h3>
-        <svg id="olPlot" viewBox="0 0 560 260" width="100%" height="260" role="img" aria-label="Strip plot and box plot of the sample"></svg>
-        <p class="annotation">Top: every value as a dot (red = flagged). Bottom: the box plot — the box spans Q1→Q3 (the middle 50%), the green line is the median, the whiskers reach the furthest points inside the 1.5×IQR fence.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="row" style="margin-top:18px;">
-    <div class="col">
-      <div class="panel">
-        <h3>The IQR rule in one block</h3>
-        <pre class="raw">Q1  = data.quantile(0.25)
-Q3  = data.quantile(0.75)
-IQR = Q3 - Q1
-mask = (data &lt; Q1 - 1.5*IQR) | (data &gt; Q3 + 1.5*IQR)</pre>
-        <p class="annotation">1.5 is convention, not law. Lower k flags more points; higher k flags fewer.</p>
-      </div>
-    </div>
-    <div class="col">
-      <div class="panel">
-        <h3>Which treatment?</h3>
-        <ul class="tight">
-          <li><strong>Flag</strong> — always start here. Look at the flagged rows before touching them.</li>
-          <li><strong>Cap (winsorise)</strong> — <code>data[data.abs() &gt; 3] = np.sign(data) * 3</code>. Keeps the row, tames the value. Good when the row's other columns matter.</li>
-          <li><strong>Drop</strong> — <code>data[(data.abs() &lt; 3).all(axis="columns")]</code>. Right when the value is clearly an error.</li>
-        </ul>
-        <p class="annotation">A real billionaire in an income dataset is not an error. Deleting them makes your analysis wrong, not cleaner.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ============================== TAB 5 ============================== -->
-<section class="tab" id="transform">
-  <h2 class="section-title">5 · Transformation — map, replace, strings &amp; regex</h2>
-  <p class="lede">Cleaned data still needs reshaping: turning labels into categories, sentinel codes into NaN, and messy text into structured columns.</p>
-
-  <div class="row">
-    <div class="col">
-      <div class="panel">
-        <h3><code>.map()</code> — look up each value in a dictionary</h3>
-        <div class="df-wrap"><table class="df" id="mapTable"></table></div>
-        <div class="btn-row" style="margin-top:12px;">
-          <button class="btn" id="mapRun">▶ Run data["food"].map(meat_to_animal)</button>
-          <button class="btn" id="mapReset">Reset</button>
-        </div>
-        <pre class="raw">meat_to_animal = {
-  "bacon": "pig",       "pulled pork": "pig",
-  "pastrami": "cow",    "corned beef": "cow",
-  "honey ham": "pig",   "nova lox": "salmon",
-}</pre>
-        <p class="annotation">A value with no dictionary entry becomes <code style="color:var(--bad)">NaN</code> — so <code>.map()</code> doubles as a spell-checker for your categories.</p>
-      </div>
+    <div class="scenario">
+      <strong>Running scenario — The Daily Grind:</strong> a 4-outlet café chain. Revenue has been flat
+      for two quarters and the owner wants to know why before signing a new lease. You have been handed
+      a messy export of 18 months of transactions, a staff roster, and an outlet reference table.
+      Everything below happens on that one problem.
     </div>
 
-    <div class="col">
-      <div class="panel">
-        <h3><code>.replace()</code> — kill sentinel values</h3>
-        <p style="margin:0 0 10px; font-size:13px; color:var(--muted);">Legacy systems encode "missing" as <code>-999</code> or <code>-1000</code>. Left as numbers, they poison every average.</p>
-        <div class="btn-row" id="repBtns">
-          <button class="btn on" data-r="orig">original</button>
-          <button class="btn" data-r="one">replace(-999, np.nan)</button>
-          <button class="btn" data-r="list">replace([-999, -1000], np.nan)</button>
-          <button class="btn" data-r="dict">replace({-999: np.nan, -1000: 0})</button>
-        </div>
-        <pre class="out" id="repOut"></pre>
-        <div class="stat-grid" style="margin-top:10px;">
-          <div class="stat"><div class="k">mean</div><div class="v changed" id="repMean"></div></div>
-          <div class="stat"><div class="k">values used</div><div class="v" id="repN"></div></div>
-        </div>
-        <p class="annotation">Before replacing, the mean is dragged to a nonsense negative number. That is what a sentinel does to your statistics.</p>
-      </div>
+    <div class="panel">
+      <h3>Pick a business question — see which stages you actually need</h3>
+      <div class="presets" id="q-buttons"></div>
+      <div class="map" id="map"></div>
+      <div class="loopback">↺ The answer usually raises a better question — the map is a loop, not a line.</div>
     </div>
-  </div>
 
-  <div class="panel" style="margin-top:18px;">
-    <h3><code>.str</code> + regex — pull structure out of text</h3>
-    <p style="margin:0 0 12px; font-size:13px; color:var(--muted);">
-      <strong>Regex</strong> is "Find" on steroids: instead of an exact word you describe a <em>shape</em> of text. Each <code>( … )</code> is a <strong>capture group</strong> — a piece you want to keep. Edit the pattern and watch the extracted columns update live.
+    <div class="panel">
+      <h3 id="detail-title">Stage detail</h3>
+      <div class="chips" id="move-chips"></div>
+      <div class="code-line" id="move-code">Click a stage above, then a tool.</div>
+      <div class="why" id="move-why"></div>
+    </div>
+  </section>
+
+  <!-- ================= PART 2: 1.8 ================= -->
+  <section class="part" id="p2">
+    <div class="part-label">Part 2 — Lesson 1.8 · Can I trust this data?</div>
+    <h2 class="headline">Every fix follows the same <em>four beats</em>.</h2>
+    <p class="intro">
+      Find it → decide → apply → verify. That habit is worth more than any single method. Click a
+      problem below: the offending rows light up red, you see the decision, the pandas line that
+      applies it, and the check that proves it worked.
     </p>
-    <div class="row">
-      <div class="col">
-        <label class="chk"><span>pattern</span></label>
-        <input class="code" id="reInput" value="([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})" />
-        <div class="btn-row" style="margin-top:10px;">
-          <button class="btn" data-re="([A-Z0-9._%+-]+)@([A-Z0-9.-]+)\.([A-Z]{2,4})">email parts</button>
-          <button class="btn" data-re="(\d+\.?\d*)">any number</button>
-          <button class="btn" data-re="\$(\d+\.?\d*)">price after $</button>
-          <button class="btn" data-re="^(\w+)">first word</button>
-        </div>
-        <label class="chk" style="margin-top:10px;">
-          <input type="checkbox" id="reCase" checked /> <code>flags=re.IGNORECASE</code>
-        </label>
-        <p class="annotation" id="reLegend"></p>
-      </div>
-      <div class="col" style="flex:1.3 1 420px;">
-        <div class="df-wrap"><table class="df" id="reTable"></table></div>
-        <pre class="out" id="reOut"></pre>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> the first 10 rows of the café export. It looks fine. It is not fine —
+      there are five separate problems hiding in it, and each one needs a <em>different</em> right answer.
+    </div>
+
+    <div class="presets" id="q18-buttons"></div>
+
+    <div class="panel">
+      <h3>Beat 1 — Find it</h3>
+      <div class="code-line" id="p18-find">Click a problem above.</div>
+      <div class="table-wrap"><table class="rows" id="p18-table"></table></div>
+      <div class="legend">
+        <span><span class="swatch" style="background: var(--accent-2)"></span>Problem found here</span>
+        <span><span class="swatch" style="background: var(--panel-2); border:1px solid var(--rule)"></span>Fine for now</span>
       </div>
     </div>
-    <div class="row" style="margin-top:14px;">
-      <div class="col">
-        <div class="panel dim">
-          <h3>Regex cheat-sheet</h3>
-          <ul class="tight">
-            <li><code>\d</code> a digit · <code>\w</code> letter/digit/underscore · <code>.</code> any character</li>
-            <li><code>+</code> one or more · <code>*</code> zero or more · <code>?</code> optional</li>
-            <li><code>[A-Z]</code> any char in the set · <code>{2,4}</code> between 2 and 4 of them</li>
-            <li><code>\.</code> a literal dot (the backslash escapes it) · <code>^</code> start · <code>$</code> end</li>
-            <li><code>( … )</code> capture group → becomes one column in <code>.str.extract()</code></li>
-          </ul>
-        </div>
-      </div>
-      <div class="col">
-        <div class="panel dim">
-          <h3>The three <code>.str</code> methods you'll actually use</h3>
-          <ul class="tight">
-            <li><code>.str.contains("gmail")</code> → boolean mask for filtering.</li>
-            <li><code>.str.findall(pat)</code> → a list of every match per row.</li>
-            <li><code>.str.extract(pat)</code> → a <em>DataFrame</em>, one column per capture group. This is the one that reshapes your data.</li>
-          </ul>
-          <p class="annotation">All of them skip NaN gracefully — that's the point of the <code>.str</code> accessor over a Python loop.</p>
-        </div>
-      </div>
+
+    <div class="panel">
+      <h3>Beats 2–4 — Decide, apply, verify</h3>
+      <div class="why" id="p18-why">Pick a problem to see the decision and the code.</div>
     </div>
-  </div>
-</section>
+  </section>
 
+  <!-- ================= PART 3: 1.9 ================= -->
+  <section class="part" id="p3">
+    <div class="part-label">Part 3 — Lesson 1.9 · What's the pattern?</div>
+    <h2 class="headline">Split, apply, combine — a pivot table is <em>one line</em>.</h2>
+    <p class="intro">
+      Clean rows answer nothing on their own. You have to group them. Choose what goes down the side,
+      what goes across the top, and how to squash the numbers in between — the grid and the
+      <code>pandas</code> line update together, so you can see exactly what your choice did.
+    </p>
 
-<!-- ============================== TAB 6 ============================== -->
-<section class="tab" id="io">
-  <h2 class="section-title">6 · Reading Files — <code>read_csv</code> is not one-size-fits-all</h2>
-  <p class="lede">A file is just text. <code>pd.read_csv()</code> guesses how to turn it into a table, and its guess is often wrong. Pick a real file from the lesson, toggle the parameters, and watch the parse change.</p>
-
-  <div class="panel">
-    <h3>File</h3>
-    <div class="btn-row" id="ioFiles">
-      <button class="btn on" data-f="ex1">ex1.csv — clean</button>
-      <button class="btn" data-f="ex2">ex2.csv — no header</button>
-      <button class="btn" data-f="ex3">ex3.txt — ragged whitespace</button>
-      <button class="btn" data-f="ex4">ex4.csv — comment lines</button>
-      <button class="btn" data-f="ex5">ex5.csv — missing values</button>
+    <div class="scenario">
+      <strong>Scenario:</strong> 24 cleaned café transactions. The owner asks, "which outlet and which
+      part of the day is carrying us?" One grouping choice answers it.
     </div>
-  </div>
 
-  <div class="row" style="margin-top:14px;">
-    <div class="col">
+    <div class="panel">
+      <h3>Build the summary</h3>
+      <div class="input-row">
+        <label>index (down the side)</label>
+        <select id="pv-index"><option value="outlet">outlet</option><option value="daypart">daypart</option><option value="weekday">weekday</option></select>
+        <label>columns (across the top)</label>
+        <select id="pv-cols"><option value="daypart">daypart</option><option value="outlet">outlet</option><option value="weekday">weekday</option><option value="">— none —</option></select>
+      </div>
+      <div class="input-row">
+        <label>values</label>
+        <select id="pv-val"><option value="amount">amount</option><option value="__count__">rows (count)</option></select>
+        <label>aggfunc</label>
+        <select id="pv-agg"><option value="mean">mean</option><option value="sum">sum</option><option value="count">count</option><option value="max">max</option></select>
+        <label>margins</label>
+        <select id="pv-marg"><option value="no">False</option><option value="yes">True</option></select>
+      </div>
+      <div class="code-line" id="pv-code"></div>
+      <div class="result-label">Result</div>
+      <div class="table-wrap"><table class="matrix" id="pv-table"></table></div>
+      <div class="legend">
+        <span><span class="swatch" style="background: var(--accent)"></span>Aggregated value</span>
+        <span><span class="swatch" style="background: rgba(17,138,178,0.4)"></span>Margin (All)</span>
+      </div>
+      <div class="why" id="pv-read"></div>
+    </div>
+
+    <div class="panel">
+      <h3>The other three moves in 1.9</h3>
+      <div class="chips" id="p19-chips"></div>
+      <div class="code-line" id="p19-code">Click a move.</div>
+      <div class="why" id="p19-why"></div>
+    </div>
+  </section>
+
+  <!-- ================= PART 4: 1.10 ================= -->
+  <section class="part" id="p4">
+    <div class="part-label">Part 4 — Lesson 1.10 · Make them act</div>
+    <h2 class="headline">The chart is chosen by the <em>message</em>, not by taste.</h2>
+    <p class="intro">
+      A good visualisation starts with a clear question, before you touch any code. Say what you are
+      trying to show and the right chart follows — along with the perception reason it works and the
+      one line that draws it.
+    </p>
+
+    <div class="scenario">
+      <strong>Scenario:</strong> you have the answer. The owner gets 20 seconds and one slide.
+      Choose wrong and a true finding gets ignored.
+    </div>
+
+    <div class="presets" id="q110-buttons"></div>
+
+    <div class="two">
       <div class="panel">
-        <h3>Raw file contents</h3>
-        <pre class="raw" id="ioRaw"></pre>
+        <h3>Recommended chart</h3>
+        <div class="sketch" id="viz-sketch"></div>
+        <div class="code-line" id="viz-code">Pick a message on the left.</div>
+        <div class="why" id="viz-why"></div>
       </div>
       <div class="panel">
-        <h3>Parameters</h3>
-        <div id="ioParams"></div>
-        <pre class="out" id="ioCall"></pre>
+        <h3>The three pillars — check before you present</h3>
+        <div class="chips" id="pillar-chips"></div>
+        <div class="why" id="pillar-why" style="margin-top:14px">Click a pillar.</div>
       </div>
     </div>
-    <div class="col" style="flex:1.2 1 420px;">
-      <div class="panel">
-        <h3>Resulting DataFrame</h3>
-        <div class="df-wrap"><table class="df" id="ioTable"></table></div>
-        <p class="annotation" id="ioNote"></p>
-      </div>
-      <div class="panel dim">
-        <h3>Parameter reference</h3>
-        <ul class="tight">
-          <li><code>header=None</code> — the file has no header row; use 0,1,2… as column names.</li>
-          <li><code>names=[…]</code> — supply your own column names.</li>
-          <li><code>index_col="message"</code> — promote a column to be the row labels.</li>
-          <li><code>sep="\s+"</code> — a regex separator: "one or more whitespace characters". Handles ragged alignment.</li>
-          <li><code>skiprows=[0,2,3]</code> — throw away specific line numbers (comments, metadata banners).</li>
-          <li><code>na_values={…}</code> — declare per-column sentinels that mean "missing".</li>
-        </ul>
-        <p class="annotation">Writing back out: <code>df.to_csv("out.csv", index=False)</code>. Without <code>index=False</code> your row numbers become a stray unnamed column that reappears next time you read the file.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-</main>
-
-<footer>
-  Single-file companion to <code>notebooks/eda_basic.ipynb</code> — no external dependencies. Open in any browser.
-</footer>
+  <footer>
+    Module 1 <span class="dot">·</span> Lessons 1.8 EDA Basic, 1.9 EDA Advanced, 1.10 Visualisation &amp; Storytelling<br>
+    Concept map <span class="dot">·</span> Self-study companion <span class="dot">·</span> <span id="ready">Ready</span>
+  </footer>
+</div>
 
 <script>
-/* ========================= tabs & toggle groups ========================= */
-const tabsNav = document.getElementById('tabs');
-tabsNav.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  tabsNav.querySelectorAll('button').forEach(x => x.classList.toggle('active', x === b));
-  document.querySelectorAll('section.tab').forEach(s => s.classList.toggle('active', s.id === b.dataset.tab));
+/* ---------------- Tabs ---------------- */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.part').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
 });
-function groupToggle(container, attr, cb, multi = false) {
-  container.addEventListener('click', e => {
-    const b = e.target.closest('button'); if (!b) return;
-    if (multi) b.classList.toggle('on');
-    else container.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-    cb(b.dataset[attr], b);
+
+/* ================================================================
+   PART 1 — THE MAP
+   ================================================================ */
+const STAGES = [
+  {
+    id: 'frame', num: 'Stage 0', title: 'Frame the question',
+    q: 'What decision is waiting on me?', lesson: 'Before any code', soft: true,
+    moves: [
+      { id:'decision', label:'Name the decision', code:'# no code yet — a sentence on paper',
+        why:'A dataset cannot tell you what matters. Write the decision first: <em>"Should we renew the Bugis lease?"</em> Everything downstream is judged against that sentence.',
+        sc:'Wrong version: "let\'s explore the sales data." That produces charts nobody uses.' },
+      { id:'metric', label:'Define the metric', code:'# revenue = sum(amount) per outlet per month',
+        why:'Agree what the number <em>means</em> before you compute it. Revenue net of refunds? Includes delivery? Two people can compute "revenue" and disagree by 12%.',
+        sc:'For the café: monthly net revenue per outlet, refunds excluded.' },
+      { id:'grain', label:'Choose the grain', code:'# one row = one transaction  (not one day, not one outlet)',
+        why:'The grain is what one row represents. Get it wrong and every later average is wrong. This decides whether you need <code>groupby</code> or <code>resample</code> later.',
+        sc:'The export is one row per transaction — so daily and monthly views must be built, not assumed.' },
+      { id:'audience', label:'Know the audience', code:'# owner, 20 seconds, on a phone',
+        why:'The audience decides the final chart in Lesson 1.10 — and therefore how much aggregating you do in 1.9. Framing runs the whole pipeline backwards from the last slide.',
+        sc:'The owner wants one number and one reason. Not a 12-panel dashboard.' }
+    ]
+  },
+  {
+    id: 'trust', num: 'Stage 1', title: 'Check the data health',
+    q: 'Can I trust these numbers at all?', lesson: 'Lesson 1.8',
+    moves: [
+      { id:'firstlook', label:'The five-move first look', code:"df.head()  df.shape  df.info()  df.dtypes  df.describe()",
+        why:'Always, in this order, on every new dataset. <code>head</code> = what do rows look like; <code>shape</code> = how big; <code>info</code> = types and holes; <code>dtypes</code> = anything stored wrong; <code>describe</code> = are the numbers plausible. Add <code>describe(include="object")</code> — that is where spelling variants surface.',
+        sc:'The five-move output <em>is</em> your to-do list. Write down every problem it reveals before you fix anything.' },
+      { id:'counts', label:'Counts & distributions', code:"df['outlet'].value_counts()   df['outlet'].unique()   df['amount'].mean()   df['amount'].idxmax()",
+        why:'Counting is the cheapest insight there is. <code>value_counts()</code> exposes both the real distribution and the data-entry chaos in one call.',
+        sc:'Four outlets, nine spellings. That is a cleaning job, not four outlets.' },
+      { id:'missing', label:'Missing values', code:"df.isna().sum()\ndf.dropna(subset=['amount'])\ndf['tip'].fillna(df['tip'].median())",
+        why:'Three holes can need three different right answers. Fill, drop, or leave as missing depends on what the blank <em>means</em> — not on what is convenient. A blank phone number stays blank; a blank category becomes "Unknown"; a blank duration gets the median.',
+        sc:'Order matters: remove the −999 sentinels <em>before</em> computing the median, or the median itself is poisoned.' },
+      { id:'dupes', label:'Duplicates', code:"df.duplicated(subset=['txn_id']).sum()\ndf = df.drop_duplicates(subset=['txn_id'], keep='first')",
+        why:'A duplicated transaction inflates revenue silently — no error, just a wrong answer. Decide what makes a row "the same row" (<code>subset</code>) and which copy survives (<code>keep</code>).',
+        sc:'The export was pulled twice on 3 March. 2 rows duplicated = $47 of imaginary revenue.' },
+      { id:'impossible', label:'Impossible values', code:"df.loc[df['amount'] < 0]\ndf['amount'] = df['amount'].mask(df['amount'] == -999)",
+        why:'Outliers may be real; impossible values never are. A negative bill or an age of 200 is a data error. Choose deliberately: cap it, or mark it missing.',
+        sc:'−999 is not a small bill. It is the source system saying "I do not know".' },
+      { id:'text', label:'Standardise text', code:"df['outlet'] = df['outlet'].str.strip().str.title().replace(MAP)",
+        why:'<code>.map()</code> silently turns anything unlisted into NaN; <code>.replace()</code> leaves it alone. Say which behaviour you want <em>before</em> you pick. Regex is for the messier cases.',
+        sc:'"bugis", " Bugis ", "BUGIS OUTLET" → "Bugis". Nine spellings collapse to four outlets.' },
+      { id:'types', label:'Types, dates & categories', code:"df['date'] = pd.to_datetime(df['date'])\ndf['band'] = pd.cut(df['amount'], bins=[0,10,25,100])\ndf['outlet'] = df['outlet'].astype('category')",
+        why:'Messy types cause silent errors downstream. Dates stored as text cannot be resampled in 1.9. <code>pd.cut()</code> turns a continuous number into business bands people can talk about; <code>get_dummies()</code> turns categories into columns.',
+        sc:'"Small / medium / large basket" is a band you created — and it is what the owner actually reasons about.' },
+      { id:'io', label:'Read & write', code:"pd.read_csv(path, na_values=['-999'])   pd.read_excel(...)   pd.read_sql(...)\nclean.to_csv('clean.csv', index=False)",
+        why:'Loading is where you can fix problems for free — <code>na_values</code> kills sentinels on the way in. On the way out, CSV and JSON forget your dtypes; databases and pickle remember them.',
+        sc:'The session\'s real output is a saved clean table other people can trust and reuse.' }
+    ]
+  },
+  {
+    id: 'shape', num: 'Stage 2', title: 'Reshape, combine & summarise',
+    q: 'What is the pattern in here?', lesson: 'Lesson 1.9',
+    moves: [
+      { id:'time', label:'Time series', code:"df = df.set_index('date')\nmonthly = df['amount'].resample('M').sum()\ntrend = monthly.rolling(3).mean()",
+        why:'A DatetimeIndex unlocks time thinking. <code>resample()</code> changes the grain (daily → monthly); <code>rolling()</code> smooths the noise so a trend becomes visible. Which value you resample to — sum, mean, close — is a business choice, not a default.',
+        sc:'Daily café revenue looks random. Monthly, with a 3-month rolling mean, the flatness is obvious.' },
+      { id:'merge', label:'Combine tables', code:"df = pd.merge(txns, outlets, on='outlet_id', how='left')",
+        why:'Same logic as a SQL JOIN — find the key column that links the tables. <code>how=</code> decides who survives: <code>inner</code> keeps only matches, <code>left</code> keeps all your transactions. Check the row count before and after, every time.',
+        sc:'Transactions alone cannot tell you about floor area or rent. The outlet table can.' },
+      { id:'reshape', label:'Wide ↔ long', code:"long = wide.melt(id_vars='date', var_name='outlet', value_name='amount')\nwide = long.pivot(index='date', columns='outlet', values='amount')",
+        why:'Long format is for computing and plotting (Seaborn wants it). Wide format is for humans reading a table. <code>melt()</code> goes wide → long, <code>pivot()</code> goes back.',
+        sc:'The finance team sends wide (one column per outlet). You melt it to plot it.' },
+      { id:'groupby', label:'GroupBy: split-apply-combine', code:"df.groupby('outlet')['amount'].agg(['count','mean','sum'])",
+        why:'The single most productive pattern in the whole module: split the rows into groups, apply a calculation to each, combine the answers into a table. <code>.agg()</code> runs several at once.',
+        sc:'Four outlets, three numbers each — and the underperformer names itself.' },
+      { id:'pivot', label:'Pivot tables & crosstabs', code:"pd.pivot_table(df, index='outlet', columns='daypart', values='amount', aggfunc='mean', margins=True)\npd.crosstab(df['outlet'], df['daypart'])",
+        why:'A two-dimensional groupby. <code>pivot_table</code> aggregates numbers; <code>crosstab</code> counts co-occurrences. <code>margins=True</code> adds the row and column totals you would otherwise compute by hand.',
+        sc:'Outlet × daypart is the grid that shows the Bugis outlet is dead in the afternoons.' },
+      { id:'corr', label:'Relationships', code:"df[['amount','party_size','tip']].corr()",
+        why:'Correlation is covariance rescaled to −1…+1, so you can compare across different units. It measures how two numbers move together — it does <em>not</em> establish cause.',
+        sc:'Bill size and party size correlate strongly. Tip rate and party size barely at all. That is a finding.' }
+    ]
+  },
+  {
+    id: 'reveal', num: 'Stage 3', title: 'Reveal & communicate',
+    q: 'How do I make them see it in 5 seconds?', lesson: 'Lesson 1.10',
+    moves: [
+      { id:'message', label:'Start with the message', code:'# "Bugis afternoons lose us $4.2k a month."',
+        why:'Write the sentence you want the audience to repeat, then choose a chart that makes that sentence obvious. Chart first, message later is how dashboards nobody reads get built.',
+        sc:'One slide, one sentence, one chart. If the chart needs a paragraph, redesign it.' },
+      { id:'perception', label:'Perception', code:"sns.barplot(data=summary, x='outlet', y='amount', hue='daypart')",
+        why:'Pre-attentive attributes — colour, length, position — are read before conscious thought. Length on a common baseline is the most accurate comparison a human can make; that is why bar charts beat pie charts.',
+        sc:'Colour the one bar that matters. Grey the rest. The eye goes where you point it.' },
+      { id:'matplotlib', label:'Matplotlib: Figure → Axes → Plot', code:"fig, ax = plt.subplots(figsize=(8,4))\nax.plot(monthly.index, monthly.values)\nax.set_title('Monthly revenue is flat')\nax.set_ylabel('S$')",
+        why:'The hierarchy is the whole mental model: a Figure is the canvas, Axes are a set of coordinates on it, and you draw onto the Axes. Once that clicks, every Matplotlib example makes sense.',
+        sc:'Control comes from Matplotlib; you will always drop back to it for the final polish.' },
+      { id:'seaborn', label:'Seaborn: statistical charts', code:"sns.histplot(df, x='amount')      # distribution\nsns.boxplot(df, x='outlet', y='amount')   # compare groups\nsns.scatterplot(df, x='party_size', y='amount')  # relationship",
+        why:'Seaborn gives you speed and sensible defaults for statistical graphics, and it is built on Matplotlib — so you can still tune anything. Distribution, categorical, relational: three families, one grammar.',
+        sc:'Faceting draws the same chart per outlet in one call — four small charts beat one crowded one.' },
+      { id:'polish', label:'Design & polish', code:"fig.savefig('revenue.png', dpi=300, bbox_inches='tight')\nax.annotate('lease renewal', xy=(x, y))",
+        why:'Titles that state the finding (not the variable), direct labels instead of legends, annotations for the one point that matters, and enough resolution to survive a projector.',
+        sc:'Title it "Bugis afternoons are the gap", not "Revenue by outlet and daypart".' },
+      { id:'integrity', label:'Integrity', code:"ax.set_ylim(0, None)   # do not truncate the axis to dramatise",
+        why:'A truncated y-axis, a dual axis, or a 3D pie chart can make a 2% change look like a collapse. Tufte\'s lie factor: the size of the visual effect should match the size of the effect in the data.',
+        sc:'You will be believed once. Distort a chart and you spend that credibility.' }
+    ]
+  },
+  {
+    id: 'decide', num: 'Stage 4', title: 'Decide & act',
+    q: 'So what — what do we do on Monday?', lesson: 'Close the loop', soft: true,
+    moves: [
+      { id:'sowhat', label:'The "so what"', code:'# finding → implication → recommendation',
+        why:'A finding is not a recommendation. "Bugis afternoons are weak" is a finding. "Cut Bugis afternoon staffing by one and trial a 3pm promo for 6 weeks" is a recommendation someone can approve.',
+        sc:'This is the sentence that justifies the whole pipeline you just built.' },
+      { id:'caveat', label:'State the limits', code:'# 2 duplicated days removed; 14 rows had no tip recorded',
+        why:'Every cleaning decision you made in 1.8 is an assumption in your conclusion. Say so, briefly. It builds trust and it protects you.',
+        sc:'"Refunds are excluded" changes how the owner reads your revenue number.' },
+      { id:'next', label:'The next question', code:'# does the promo actually lift the 3pm hour?',
+        why:'Good analysis ends by making a sharper question possible. That question re-enters at Stage 0 — which is why this map loops.',
+        sc:'The loop is the job. One pass is never the whole story.' }
+    ]
+  }
+];
+
+const QUESTIONS = [
+  { id:'q1', label:'Which outlet is underperforming — and why?',
+    route: { frame:['decision','metric'], trust:['firstlook','counts','text','dupes'], shape:['groupby','pivot','merge'], reveal:['message','perception','seaborn'], decide:['sowhat'] },
+    note:'Comparison question. The work is mostly grouping — but only after the nine outlet spellings become four.' },
+  { id:'q2', label:'Is revenue really falling, or is that just noise?',
+    route: { frame:['metric','grain'], trust:['firstlook','missing','types'], shape:['time'], reveal:['matplotlib','integrity'], decide:['caveat'] },
+    note:'Trend question. Dates must be real datetimes in 1.8 or nothing in 1.9 works. Watch the y-axis.' },
+  { id:'q3', label:'Do bigger groups actually spend more per head?',
+    route: { frame:['metric','grain'], trust:['firstlook','impossible'], shape:['corr','groupby'], reveal:['seaborn','perception'], decide:['sowhat','caveat'] },
+    note:'Relationship question. Impossible values distort correlation badly — clean before you correlate.' },
+  { id:'q4', label:'Which day-part should we staff more heavily?',
+    route: { frame:['decision','audience'], trust:['text','types'], shape:['pivot','groupby'], reveal:['perception','seaborn','polish'], decide:['sowhat','next'] },
+    note:'Two-dimensional question. You have to create the daypart band yourself with pd.cut — it is not in the raw data.' },
+  { id:'q5', label:'Can I even trust the file ops just sent me?',
+    route: { frame:['grain'], trust:['firstlook','counts','missing','dupes','impossible','text','types','io'], shape:[], reveal:[], decide:['caveat'] },
+    note:'Sometimes the whole job stops at Stage 1 — and reporting "this data cannot answer that" is a valid, valuable answer.' }
+];
+
+let selStage = 'trust', selMove = null, selQ = null;
+
+function renderQButtons() {
+  const box = document.getElementById('q-buttons');
+  box.innerHTML = '';
+  QUESTIONS.forEach(q => {
+    const b = document.createElement('button');
+    b.textContent = q.label;
+    if (selQ === q.id) b.classList.add('on');
+    b.addEventListener('click', () => { selQ = (selQ === q.id ? null : q.id); selMove = null; renderAll1(); });
+    box.appendChild(b);
   });
+  const clear = document.createElement('button');
+  clear.textContent = '↺ show everything';
+  clear.addEventListener('click', () => { selQ = null; selMove = null; renderAll1(); });
+  box.appendChild(clear);
 }
 
-/* ========================= stats helpers ========================= */
-const NA = null;
-const isNA = v => v === null || v === undefined || (typeof v === 'number' && isNaN(v));
-const nums = a => a.filter(v => !isNA(v));
-const sum = a => a.reduce((x, y) => x + y, 0);
-const mean = a => sum(a) / a.length;
-function std(a) {                       // pandas default ddof=1
-  if (a.length < 2) return NaN;
-  const m = mean(a);
-  return Math.sqrt(sum(a.map(v => (v - m) ** 2)) / (a.length - 1));
+function activeRoute() {
+  const q = QUESTIONS.find(x => x.id === selQ);
+  return q ? q.route : null;
 }
-function quantile(a, q) {               // linear interpolation, matches pandas default
-  const s = [...a].sort((x, y) => x - y);
-  const pos = (s.length - 1) * q, lo = Math.floor(pos), hi = Math.ceil(pos);
-  return lo === hi ? s[lo] : s[lo] + (s[hi] - s[lo]) * (pos - lo);
-}
-const median = a => quantile(a, 0.5);
-const fmt = (v, d = 6) => isNA(v) ? 'NaN' : (Number.isInteger(v) ? String(v) : Number(v.toFixed(d)).toString());
-const pad = (s, n) => String(s).padStart(n);
-const padR = (s, n) => String(s).padEnd(n);
 
-/* ========================= table renderer ========================= */
-function renderDF(table, df, opts = {}) {
-  const { showDtype = false, cellClass = null, fadedRows = [], indexName = '' } = opts;
-  table.innerHTML = '';
-  const thead = document.createElement('thead'), trh = document.createElement('tr');
-  const corner = document.createElement('th');
-  corner.className = 'idx-h'; corner.textContent = indexName || 'index';
-  trh.appendChild(corner);
-  df.columns.forEach((c, ci) => {
-    const th = document.createElement('th');
-    th.textContent = c;
-    if (showDtype && df.dtypes) {
-      const d = document.createElement('span'); d.className = 'dtype'; d.textContent = df.dtypes[ci];
-      th.appendChild(d);
+function renderMap() {
+  const map = document.getElementById('map');
+  map.innerHTML = '';
+  const route = activeRoute();
+  STAGES.forEach((s, i) => {
+    if (i > 0) {
+      const a = document.createElement('div');
+      a.className = 'arrow' + (route ? '' : ' route');
+      a.textContent = '→';
+      map.appendChild(a);
     }
-    trh.appendChild(th);
+    const el = document.createElement('div');
+    el.className = 'stage';
+    if (s.id === selStage) el.classList.add('sel');
+    if (route) {
+      if (route[s.id] && route[s.id].length) el.classList.add('route');
+      else el.classList.add('dim');
+    }
+    el.innerHTML = `<div class="snum">${s.num}</div>
+      <div class="stitle">${s.title}</div>
+      <div class="sq">"${s.q}"</div>
+      <div class="slesson${s.soft ? ' soft' : ''}">${s.lesson}</div>`;
+    el.addEventListener('click', () => { selStage = s.id; selMove = null; renderAll1(); });
+    map.appendChild(el);
   });
-  thead.appendChild(trh); table.appendChild(thead);
+}
 
-  const tbody = document.createElement('tbody');
-  df.values.forEach((row, ri) => {
+function renderDetail() {
+  const s = STAGES.find(x => x.id === selStage);
+  const route = activeRoute();
+  const needed = route ? (route[s.id] || []) : null;
+  document.getElementById('detail-title').textContent = `${s.num} — ${s.title} · ${s.lesson}`;
+  const chips = document.getElementById('move-chips');
+  chips.innerHTML = '';
+  s.moves.forEach(m => {
+    const c = document.createElement('div');
+    c.className = 'chip';
+    c.textContent = m.label;
+    if (selMove === m.id) c.classList.add('sel');
+    if (needed) { if (needed.includes(m.id)) c.classList.add('route'); else c.classList.add('dim'); }
+    c.addEventListener('click', () => { selMove = m.id; renderAll1(); });
+    chips.appendChild(c);
+  });
+  const m = s.moves.find(x => x.id === selMove);
+  const q = QUESTIONS.find(x => x.id === selQ);
+  if (m) {
+    document.getElementById('move-code').textContent = m.code;
+    document.getElementById('move-why').innerHTML =
+      `<div class="tag">Why it exists</div>${m.why}
+       <div class="tag">In the café</div><span class="sc">${m.sc}</span>` +
+      (q ? `<div class="tag">On this question</div>${q.note}` : '');
+  } else {
+    document.getElementById('move-code').textContent = 'Click a tool above to see what it is for.';
+    document.getElementById('move-why').innerHTML = needed
+      ? `<div class="tag">On this question</div>${q.note}` +
+        (needed.length ? `<div class="tag">Stage tools you need</div>${needed.length} of ${s.moves.length} tools in this stage are highlighted.`
+                       : `<div class="tag">Stage tools you need</div>None — this question does not reach this stage.`)
+      : '';
+  }
+}
+
+function renderAll1() { renderQButtons(); renderMap(); renderDetail(); }
+renderAll1();
+
+/* ================================================================
+   PART 2 — LESSON 1.8, the four beats
+   ================================================================ */
+const ROWS18 = [
+  { txn:'T-1001', date:'2025-03-01', outlet:'Bugis',        amount:'12.50', tip:'1.50', pay:'card' },
+  { txn:'T-1002', date:'2025-03-01', outlet:' bugis ',      amount:'8.00',  tip:'',     pay:'cash' },
+  { txn:'T-1003', date:'01/03/2025', outlet:'Tampines',     amount:'-999',  tip:'2.00', pay:'card' },
+  { txn:'T-1004', date:'2025-03-02', outlet:'BUGIS OUTLET', amount:'21.00', tip:'3.00', pay:'card' },
+  { txn:'T-1005', date:'2025-03-02', outlet:'Jurong',       amount:'',      tip:'0.00', pay:'cash' },
+  { txn:'T-1006', date:'2025-03-03', outlet:'Tampines',     amount:'15.00', tip:'1.00', pay:'card' },
+  { txn:'T-1006', date:'2025-03-03', outlet:'Tampines',     amount:'15.00', tip:'1.00', pay:'card' },
+  { txn:'T-1007', date:'2025-03-03', outlet:'Orchard',      amount:'-4.20', tip:'',     pay:'refund' },
+  { txn:'T-1008', date:'2025-03-04', outlet:'orchard rd',   amount:'9.80',  tip:'1.20', pay:'cash' },
+  { txn:'T-1009', date:'2025-03-04', outlet:'Jurong',       amount:'480.00',tip:'0.00', pay:'card' }
+];
+const COLS18 = ['txn','date','outlet','amount','tip','pay'];
+
+const PROBS18 = [
+  { id:'missing', label:'Missing values',
+    find: "clean.isna().sum()",
+    hit: (r) => (r.amount === '' ? ['amount'] : []).concat(r.tip === '' ? ['tip'] : []),
+    decide:'Two blanks, two different right answers. A blank <code>amount</code> is a broken row — you cannot invent a sale, so drop it. A blank <code>tip</code> almost certainly means no tip was given, so 0 is the honest fill.',
+    apply: "clean = clean.dropna(subset=['amount'])\nclean['tip'] = clean['tip'].fillna(0)",
+    verify: "clean.isna().sum()   # expect 0 for amount and tip",
+    trap:'Do not reach for the median reflexively. Fill vs drop vs leave-missing depends on what the blank <em>means</em>.' },
+  { id:'dupes', label:'Duplicate rows',
+    find: "clean.duplicated(subset=['txn']).sum()",
+    hit: (r, i, all) => all.findIndex(x => x.txn === r.txn) !== i || all.filter(x => x.txn === r.txn).length > 1 ? COLS18 : [],
+    decide:'T-1006 appears twice — the export was pulled twice. A transaction ID should be unique, so that is your definition of "the same row". Keep the first copy.',
+    apply: "clean = clean.drop_duplicates(subset=['txn'], keep='first')",
+    verify: "clean['txn'].is_unique   # expect True",
+    trap:'Never call <code>drop_duplicates()</code> with no <code>subset</code> on real data — two genuinely different customers can buy the same coffee at the same minute.' },
+  { id:'sentinel', label:'Sentinel codes (−999)',
+    find: "clean.loc[clean['amount'] == -999]",
+    hit: (r) => r.amount === '-999' ? ['amount'] : [],
+    decide:'−999 is not a price. It is the source system saying "unknown". It must become a real missing value — <em>before</em> you compute any statistic.',
+    apply: "clean['amount'] = clean['amount'].mask(clean['amount'] == -999)\n# or, better, catch it on the way in:\n# pd.read_csv(path, na_values=['-999'])",
+    verify: "clean['amount'].min()   # expect a plausible smallest bill",
+    trap:'This is the order-of-operations trap: leave −999 in and your mean, median and every imputation built on it are silently wrong.' },
+  { id:'impossible', label:'Impossible & extreme values',
+    find: "clean.loc[(clean['amount'] < 0) | (clean['amount'] > 200)]",
+    hit: (r) => (r.amount === '-4.20' || r.amount === '480.00') ? ['amount'] : [],
+    decide:'Two different situations that look alike. −4.20 with <code>pay = refund</code> is <em>legitimate</em> — it belongs in a refunds analysis, not in revenue. 480.00 is a plausible catering order: an outlier, not an error. Investigate before you delete.',
+    apply: "refunds = clean[clean['pay'] == 'refund']\nsales   = clean[clean['pay'] != 'refund']\n# keep the 480 — check it, don't cap it by reflex",
+    verify: "sales['amount'].describe()   # min > 0, max explainable",
+    trap:'Outliers can be real; impossible values never are. Deleting inconvenient rows is how analyses become fiction.' },
+  { id:'text', label:'Inconsistent text',
+    find: "clean['outlet'].value_counts()",
+    hit: (r) => [' bugis ', 'BUGIS OUTLET', 'orchard rd'].includes(r.outlet) ? ['outlet'] : [],
+    decide:'Four outlets, seven spellings. Strip the whitespace, fix the case, then map the survivors onto the four canonical names. Use <code>.replace()</code> — it leaves unlisted values alone. <code>.map()</code> would silently turn anything you forgot into NaN.',
+    apply: "clean['outlet'] = (clean['outlet'].str.strip().str.title()\n                    .replace({'Bugis Outlet':'Bugis', 'Orchard Rd':'Orchard'}))",
+    verify: "clean['outlet'].value_counts()   # expect exactly 4 rows",
+    trap:'Do this before any <code>groupby</code>. Group on dirty text and you get seven outlets in your report.' },
+  { id:'types', label:'Wrong types & dates',
+    find: "clean.dtypes",
+    hit: (r) => r.date === '01/03/2025' ? ['date'] : [],
+    decide:'Everything came in as text, and one date is in a different format. Amounts must be numeric or you cannot sum them; dates must be datetimes or Lesson 1.9 resampling is impossible.',
+    apply: "clean['amount'] = clean['amount'].astype(float)   # safe only after the -999s and blanks are dealt with\nclean['date']   = pd.to_datetime(clean['date'], errors='coerce')\nclean['outlet'] = clean['outlet'].astype('category')",
+    verify: "clean.dtypes   # datetime64, float64, category",
+    trap:'<code>errors="coerce"</code> turns unparseable dates into NaT instead of crashing — so always re-run <code>isna().sum()</code> straight afterwards. And note this beat comes <em>last</em>: convert types only once the text and sentinels are clean.' }
+];
+
+let sel18 = null;
+
+function render18Buttons() {
+  const box = document.getElementById('q18-buttons');
+  box.innerHTML = '';
+  PROBS18.forEach(p => {
+    const b = document.createElement('button');
+    b.textContent = p.label;
+    if (sel18 === p.id) b.classList.add('on');
+    b.addEventListener('click', () => { sel18 = (sel18 === p.id ? null : p.id); render18(); });
+    box.appendChild(b);
+  });
+}
+
+function render18Table() {
+  const tbl = document.getElementById('p18-table');
+  tbl.innerHTML = '';
+  const p = PROBS18.find(x => x.id === sel18);
+  const head = document.createElement('tr');
+  COLS18.forEach(c => { const th = document.createElement('th'); th.textContent = c; head.appendChild(th); });
+  tbl.appendChild(head);
+  ROWS18.forEach((r, i) => {
     const tr = document.createElement('tr');
-    if (fadedRows[ri]) tr.classList.add('faded');
-    const idx = document.createElement('td');
-    idx.className = 'idx'; idx.textContent = df.index[ri];
-    tr.appendChild(idx);
-    row.forEach((v, ci) => {
+    const hits = p ? p.hit(r, i, ROWS18) : [];
+    COLS18.forEach(c => {
       const td = document.createElement('td');
-      if (isNA(v)) { td.textContent = 'NaN'; td.className = 'nan'; }
-      else if (typeof v === 'boolean') {
-        td.textContent = v ? 'True' : 'False';
-        td.style.color = v ? 'var(--good)' : 'var(--bad)'; td.style.fontWeight = 700;
-      }
-      else if (typeof v === 'number') { td.textContent = fmt(v); td.className = 'num'; }
-      else td.textContent = v;
-      const extra = cellClass && cellClass(ri, ci, v);
-      if (extra) td.classList.add(extra);
+      td.textContent = r[c] === '' ? 'NaN' : r[c];
+      if (r[c] === '') td.style.color = 'var(--ink-dim)';
+      if (hits.includes(c)) td.classList.add('badcell');
       tr.appendChild(td);
     });
-    tbody.appendChild(tr);
+    tbl.appendChild(tr);
   });
-  table.appendChild(tbody);
 }
 
-/* ========================= TAB 0 ========================= */
-const whyOut = document.getElementById('whyOut');
-function showWhy(dirty) {
-  const ages = dirty ? [19, 21, 220, 20, 22, 23] : [19, 21, 22, 20, 22, 23];
-  whyOut.textContent =
-`ages = [${ages.join(', ')}]
-
-count   ${ages.length}
-mean    ${fmt(mean(ages), 2)}
-median  ${fmt(median(ages), 2)}
-max     ${Math.max(...ages)}`;
-  whyOut.classList.toggle('err', dirty);
-}
-document.getElementById('whyClean').addEventListener('click', e => {
-  document.getElementById('whyDirty').classList.remove('on'); e.target.classList.add('on'); showWhy(false);
-});
-document.getElementById('whyDirty').addEventListener('click', e => {
-  document.getElementById('whyClean').classList.remove('on'); e.target.classList.add('on'); showWhy(true);
-});
-showWhy(false);
-
-/* ========================= TAB 1 — health check ========================= */
-const health = {
-  index: [0, 1, 2, 3, 4, 5],
-  columns: ['name', 'age', 'city', 'score'],
-  dtypes: ['object', 'float64', 'object', 'float64'],
-  values: [
-    ['Alice',   34,  'Singapore', 88.5],
-    ['Bob',     28,  'Penang',    72.0],
-    ['Charlie', NA,  'Singapore', 91.5],
-    ['Diana',   45,  'Jakarta',   NA  ],
-    ['Ethan',   31,  'Singapore', 65.0],
-    ['Fiona',   29,  NA,          79.5],
-  ],
-};
-renderDF(document.getElementById('healthTable'), health, { showDtype: true });
-
-function col(df, name) { const i = df.columns.indexOf(name); return df.values.map(r => r[i]); }
-function describeNumeric(df, names) {
-  const stats = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max'];
-  const rows = names.map(n => {
-    const v = nums(col(df, n));
-    return [v.length, mean(v), std(v), Math.min(...v), quantile(v, .25), quantile(v, .5), quantile(v, .75), Math.max(...v)];
-  });
-  const w = 12;
-  let out = padR('', 8) + names.map(n => pad(n, w)).join('');
-  stats.forEach((s, si) => { out += '\n' + padR(s, 8) + rows.map(r => pad(fmt(r[si], 4), w)).join(''); });
-  return out;
-}
-const healthOut = document.getElementById('healthOut'), healthNote = document.getElementById('healthNote');
-const healthNotes = {
-  shape: 'A tuple: (rows, columns). The very first thing to check — does the row count match what you were promised?',
-  dtypes: 'age and score are float64 rather than int64 precisely because they contain NaN — NaN is a float, so the whole column becomes float.',
-  info: 'The workhorse. Non-null counts below 6 tell you exactly which columns have holes, without computing anything.',
-  describe: 'Numeric columns only. Note count = 5 for both — .describe() silently ignores NaN, so count is your missing-data alarm.',
-  describeObj: 'Text columns get a completely different summary: unique, top (most frequent), freq. No mean or std — those are meaningless for names.',
-  vc: 'Frequency table for one categorical column, sorted high to low. NaN is excluded by default (pass dropna=False to include it).',
-  isna: 'isna() gives a True/False table; .sum() counts the Trues per column, because True counts as 1. The fastest missing-value audit there is.',
-};
-function runHealth(m) {
-  let t = '';
-  if (m === 'shape') t = '(6, 4)';
-  else if (m === 'dtypes') t = health.columns.map((c, i) => padR(c, 8) + health.dtypes[i]).join('\n') + '\ndtype: object';
-  else if (m === 'info') {
-    t = `<class 'pandas.core.frame.DataFrame'>
-RangeIndex: 6 entries, 0 to 5
-Data columns (total 4 columns):
- #   Column  Non-Null Count  Dtype
----  ------  --------------  -----
-` + health.columns.map((c, i) =>
-      ` ${i}   ${padR(c, 7)} ${padR(nums(col(health, c)).length + ' non-null', 15)} ${health.dtypes[i]}`).join('\n')
-      + `\ndtypes: float64(2), object(2)`;
+function render18() {
+  render18Buttons();
+  render18Table();
+  const p = PROBS18.find(x => x.id === sel18);
+  if (!p) {
+    document.getElementById('p18-find').textContent = 'Click a problem above.';
+    document.getElementById('p18-why').innerHTML = 'Pick a problem to see the decision and the code.';
+    return;
   }
-  else if (m === 'describe') t = describeNumeric(health, ['age', 'score']);
-  else if (m === 'describeObj') {
-    const mk = n => {
-      const v = nums(col(health, n)), c = {};
-      v.forEach(x => c[x] = (c[x] || 0) + 1);
-      const top = Object.entries(c).sort((a, b) => b[1] - a[1])[0];
-      return [v.length, new Set(v).size, top[0], top[1]];
-    };
-    const names = ['name', 'city'], rows = names.map(mk), keys = ['count', 'unique', 'top', 'freq'], w = 12;
-    t = padR('', 8) + names.map(n => pad(n, w)).join('');
-    keys.forEach((k, i) => { t += '\n' + padR(k, 8) + rows.map(r => pad(r[i], w)).join(''); });
-  }
-  else if (m === 'vc') {
-    const v = nums(col(health, 'city')), c = {};
-    v.forEach(x => c[x] = (c[x] || 0) + 1);
-    t = 'city\n' + Object.entries(c).sort((a, b) => b[1] - a[1]).map(([k, n]) => padR(k, 12) + n).join('\n')
-      + '\nName: count, dtype: int64';
-  }
-  else if (m === 'isna') t = health.columns.map(c => padR(c, 8) + (6 - nums(col(health, c)).length)).join('\n') + '\ndtype: int64';
-  healthOut.textContent = t;
-  healthNote.textContent = healthNotes[m];
+  document.getElementById('p18-find').textContent = p.find;
+  document.getElementById('p18-why').innerHTML =
+    `<div class="tag">Beat 2 — Decide</div>${p.decide}
+     <div class="tag">Beat 3 — Apply</div><div class="code-line">${p.apply.replace(/</g,'&lt;')}</div>
+     <div class="tag">Beat 4 — Verify</div><div class="code-line">${p.verify.replace(/</g,'&lt;')}</div>
+     <div class="tag">The trap</div><span class="sc">${p.trap}</span>`;
 }
-groupToggle(document.getElementById('healthBtns'), 'm', runHealth);
-runHealth('shape');
+render18();
 
-const mmSlider = document.getElementById('mmSlider');
-function refreshMM() {
-  const v = +mmSlider.value, arr = [10, 12, 14, 16, v];
-  document.getElementById('mmVal').textContent = v;
-  document.getElementById('mmMean').textContent = fmt(mean(arr), 1);
-  document.getElementById('mmMedian').textContent = fmt(median(arr), 1);
-}
-mmSlider.addEventListener('input', refreshMM); refreshMM();
-
-/* ========================= TAB 2 — missing data ========================= */
-/* notebook cell: [[1., 6.5, 3.], [1., nan, nan], [nan, nan, nan], [nan, 6.5, 3.]] plus the all-NaN column 3 */
-const naBase = {
-  index: [0, 1, 2, 3],
-  columns: ['0', '1', '2', '3'],
-  values: [
-    [1, 6.5, 3, NA],
-    [1, NA, NA, NA],
-    [NA, NA, NA, NA],
-    [NA, 6.5, 3, NA],
-  ],
-};
-const naNotes = {
-  none: 'The starting point. Column 3 is entirely NaN; row 2 is entirely NaN; rows 1 and 3 are partly missing.',
-  isna: 'isna() keeps the same shape but replaces every value with True (missing) or False (present). It is a mask, not a fix.',
-  dropna: 'Default: drop any row containing at least one NaN. Here that leaves nothing — because column 3 is all NaN, every row qualifies. This is why the default is dangerous on wide tables.',
-  dropall: 'how="all" only removes rows where every value is missing — row 2 goes, the rest stay. Conservative and usually safe.',
-  dropcol: 'axis="columns" switches the axis: now it is the all-NaN column 3 that gets dropped, not rows. Same rule, other direction.',
-  thresh: 'thresh=2 keeps rows with at least 2 non-NaN values. Rows 0 and 3 qualify; rows 1 and 2 do not. The tunable middle ground.',
-  fill0: 'Every hole becomes 0. Fast, and often wrong: it asserts that a missing measurement was zero.',
-  filldict: 'A dict fills each column differently. Column 3 has no entry, so its NaNs survive untouched.',
-  ffill: 'Forward fill copies the last valid value downward. Natural for time series, meaningless for unordered rows.',
-  bfill: 'Backward fill copies the next valid value upward. Note column 3 stays NaN — there is no valid value anywhere to copy.',
-  mean: 'Imputation with the column mean. Rows survive and the column average is unchanged, but the spread (std) shrinks, because every filled value sits exactly on the mean.',
-};
-const naExprs = {
-  none: 'df', isna: 'df.isna()', dropna: 'df.dropna()', dropall: 'df.dropna(how="all")',
-  dropcol: 'df.dropna(axis="columns", how="all")', thresh: 'df.dropna(thresh=2)',
-  fill0: 'df.fillna(0)', filldict: 'df.fillna({1: 0.5, 2: 0})', ffill: 'df.ffill()', bfill: 'df.bfill()',
-  mean: 'df.fillna(df.mean())',
-};
-function naApply(op) {
-  const cols = [...naBase.columns], vals = naBase.values.map(r => [...r]), idx = [...naBase.index];
-  const keepRows = f => {
-    const k = vals.map(f);
-    return { index: idx.filter((_, i) => k[i]), values: vals.filter((_, i) => k[i]), columns: cols };
-  };
-  if (op === 'isna')    return { index: idx, columns: cols, values: vals.map(r => r.map(isNA)) };
-  if (op === 'dropna')  return keepRows(r => r.every(v => !isNA(v)));
-  if (op === 'dropall') return keepRows(r => !r.every(isNA));
-  if (op === 'thresh')  return keepRows(r => nums(r).length >= 2);
-  if (op === 'dropcol') {
-    const keep = cols.map((_, ci) => !vals.every(r => isNA(r[ci])));
-    return { index: idx, columns: cols.filter((_, i) => keep[i]), values: vals.map(r => r.filter((_, i) => keep[i])) };
-  }
-  if (op === 'fill0') return { index: idx, columns: cols, values: vals.map(r => r.map(v => isNA(v) ? 0 : v)) };
-  if (op === 'filldict') {
-    const f = { 1: 0.5, 2: 0 };
-    return { index: idx, columns: cols, values: vals.map(r => r.map((v, ci) => isNA(v) && ci in f ? f[ci] : v)) };
-  }
-  if (op === 'ffill' || op === 'bfill') {
-    const order = op === 'ffill' ? [...vals.keys()] : [...vals.keys()].reverse();
-    const out = vals.map(r => [...r]), last = {};
-    order.forEach(ri => out[ri].forEach((v, ci) => {
-      if (!isNA(v)) last[ci] = v; else if (ci in last) out[ri][ci] = last[ci];
-    }));
-    return { index: idx, columns: cols, values: out };
-  }
-  if (op === 'mean') {
-    const m = cols.map((_, ci) => { const v = nums(vals.map(r => r[ci])); return v.length ? mean(v) : NA; });
-    return { index: idx, columns: cols, values: vals.map(r => r.map((v, ci) => isNA(v) ? m[ci] : v)) };
-  }
-  return { index: idx, columns: cols, values: vals };
-}
-const FILL_OPS = ['fill0', 'filldict', 'ffill', 'bfill', 'mean'];
-function refreshNA(op) {
-  const res = naApply(op);
-  renderDF(document.getElementById('naAfter'), res, {
-    cellClass: (ri, ci, v) => {
-      if (!FILL_OPS.includes(op) || isNA(v)) return null;
-      const br = naBase.index.indexOf(res.index[ri]), bc = naBase.columns.indexOf(res.columns[ci]);
-      return isNA(naBase.values[br][bc]) ? 'fixed' : null;
-    },
-  });
-  renderDF(document.getElementById('naBefore'), naBase, {
-    fadedRows: naBase.index.map(i => !res.index.includes(i)),
-  });
-  document.getElementById('naExpr').textContent = naExprs[op];
-  document.getElementById('naRows').textContent = res.values.length;
-  document.getElementById('naCols').textContent = res.columns.length;
-  document.getElementById('naCount').textContent = op === 'isna' ? '—' : res.values.flat().filter(isNA).length;
-  document.getElementById('naNote').textContent = naNotes[op];
-}
-groupToggle(document.getElementById('naBtns'), 'op', refreshNA);
-refreshNA('none');
-
-/* ========================= TAB 3 — duplicates ========================= */
-const dupBase = {
-  index: [0, 1, 2, 3, 4, 5, 6],
-  columns: ['k1', 'k2', 'v1'],
-  values: [
-    ['one', 1, 0], ['two', 1, 1], ['one', 2, 2], ['two', 3, 3],
-    ['one', 3, 4], ['two', 4, 5], ['two', 4, 6],
-  ],
-};
-let dupSubsetCols = ['k1', 'k2'], dupKeep = 'first';
-function refreshDup() {
-  const idxs = dupSubsetCols.map(c => dupBase.columns.indexOf(c));
-  const keys = dupBase.values.map(r => idxs.map(i => String(r[i])).join('|'));
-  const flag = keys.map((k, i) => {
-    if (dupKeep === 'first') return keys.indexOf(k) !== i;
-    if (dupKeep === 'last')  return keys.lastIndexOf(k) !== i;
-    return keys.filter(x => x === k).length > 1;
-  });
-  renderDF(document.getElementById('dupTable'), {
-    index: dupBase.index,
-    columns: [...dupBase.columns, 'duplicated()'],
-    values: dupBase.values.map((r, i) => [...r, flag[i]]),
-  }, { cellClass: (ri, ci) => flag[ri] && ci < 3 ? 'warn' : null });
-
-  renderDF(document.getElementById('dupResult'), {
-    index: dupBase.index.filter((_, i) => !flag[i]),
-    columns: dupBase.columns,
-    values: dupBase.values.filter((_, i) => !flag[i]),
-  });
-
-  const keepTxt = dupKeep === 'none' ? 'False' : `"${dupKeep}"`;
-  document.getElementById('dupExpr').textContent =
-    `data.duplicated(subset=${JSON.stringify(dupSubsetCols)}, keep=${keepTxt})\ndata.drop_duplicates(subset=${JSON.stringify(dupSubsetCols)}, keep=${keepTxt})`;
-  document.getElementById('dupFlagged').textContent = flag.filter(Boolean).length;
-  document.getElementById('dupOut').textContent = flag.filter(f => !f).length;
-}
-groupToggle(document.getElementById('dupSubset'), 'c', () => {
-  dupSubsetCols = [...document.querySelectorAll('#dupSubset button.on')].map(b => b.dataset.c);
-  if (!dupSubsetCols.length) {
-    dupSubsetCols = ['k1'];
-    document.querySelector('#dupSubset [data-c=k1]').classList.add('on');
-  }
-  refreshDup();
-}, true);
-groupToggle(document.getElementById('dupKeep'), 'k', k => { dupKeep = k; refreshDup(); });
-refreshDup();
-
-/* ========================= TAB 4 — outliers ========================= */
-/* deterministic normal sample (mulberry32 + Box-Muller) so the page always looks the same */
-function rng32(seed) {
-  return function () {
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  };
-}
-const olData = (() => {
-  const r = rng32(12345), out = [];
-  while (out.length < 1000) {
-    const u = Math.max(r(), 1e-9), v = r();
-    out.push(Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v));
-  }
-  return out;
-})();
-let olRule = 'std', olK = 3, olAction = 'flag';
-function refreshOL() {
-  const s = std(olData), m = mean(olData);
-  let lo, hi;
-  if (olRule === 'std') { lo = m - olK * s; hi = m + olK * s; }
-  else {
-    const q1 = quantile(olData, .25), q3 = quantile(olData, .75), iqr = q3 - q1;
-    lo = q1 - olK * iqr; hi = q3 + olK * iqr;
-  }
-  const flagged = olData.map(v => v < lo || v > hi);
-  let shown;
-  if (olAction === 'cap') shown = olData.map(v => Math.min(hi, Math.max(lo, v)));
-  else if (olAction === 'drop') shown = olData.filter((_, i) => !flagged[i]);
-  else shown = olData;
-
-  document.getElementById('olKVal').textContent = olK.toFixed(1);
-  document.getElementById('olExpr').textContent = olRule === 'std'
-    ? `mask = data.abs() > ${olK.toFixed(1)} * data.std()\nbounds: [${fmt(lo, 2)}, ${fmt(hi, 2)}]`
-    : `Q1, Q3 = data.quantile(.25), data.quantile(.75)\nIQR = Q3 - Q1\nmask = (data < Q1 - ${olK.toFixed(1)}*IQR) | (data > Q3 + ${olK.toFixed(1)}*IQR)\nbounds: [${fmt(lo, 2)}, ${fmt(hi, 2)}]`;
-  document.getElementById('olN').textContent = shown.length;
-  document.getElementById('olCount').textContent = flagged.filter(Boolean).length;
-  document.getElementById('olMean').textContent = fmt(mean(shown), 3);
-  document.getElementById('olStd').textContent = fmt(std(shown), 3);
-  document.getElementById('olMin').textContent = fmt(Math.min(...shown), 2);
-  document.getElementById('olMax').textContent = fmt(Math.max(...shown), 2);
-  drawOL(shown, olData, lo, hi);
-}
-function drawOL(shown, raw, lo, hi) {
-  const svg = document.getElementById('olPlot');
-  const W = 560, H = 260, padX = 34;
-  const domainMax = Math.max(4.2, Math.abs(Math.min(...raw)), Math.abs(Math.max(...raw)));
-  const x = v => padX + (v + domainMax) / (2 * domainMax) * (W - 2 * padX);
-  const parts = [];
-  parts.push(`<line x1="${padX}" y1="200" x2="${W - padX}" y2="200" stroke="#2a313c" stroke-width="1"/>`);
-  for (let t = -Math.floor(domainMax); t <= Math.floor(domainMax); t++) {
-    parts.push(`<line x1="${x(t)}" y1="196" x2="${x(t)}" y2="204" stroke="#2a313c"/>`);
-    parts.push(`<text x="${x(t)}" y="220" fill="#9aa3b2" font-size="10" text-anchor="middle">${t}</text>`);
-  }
-  [lo, hi].forEach(b => parts.push(
-    `<line x1="${x(b)}" y1="14" x2="${x(b)}" y2="200" stroke="#f0a96a" stroke-width="1" stroke-dasharray="4 4"/>`));
-  parts.push(`<text x="${x(hi) + 4}" y="24" fill="#f0a96a" font-size="10">bound ${fmt(hi, 2)}</text>`);
-
-  const jitter = rng32(7);
-  const capped = olAction === 'cap';
-  shown.forEach(v => {
-    const isOut = capped
-      ? (Math.abs(v - lo) < 1e-12 || Math.abs(v - hi) < 1e-12)
-      : (v < lo || v > hi);
-    const y = 26 + jitter() * 108;
-    parts.push(`<circle cx="${x(v).toFixed(1)}" cy="${y.toFixed(1)}" r="${isOut ? 2.6 : 1.7}" fill="${isOut ? '#ef6a6a' : '#6ad0f0'}" opacity="${isOut ? .95 : .35}"/>`);
-  });
-
-  const q1 = quantile(shown, .25), q2 = quantile(shown, .5), q3 = quantile(shown, .75), iqr = q3 - q1;
-  const wLo = Math.max(Math.min(...shown), q1 - 1.5 * iqr), wHi = Math.min(Math.max(...shown), q3 + 1.5 * iqr);
-  const boxY = 150, boxH = 30;
-  parts.push(`<line x1="${x(wLo)}" y1="${boxY + boxH / 2}" x2="${x(wHi)}" y2="${boxY + boxH / 2}" stroke="#9aa3b2"/>`);
-  parts.push(`<line x1="${x(wLo)}" y1="${boxY + 6}" x2="${x(wLo)}" y2="${boxY + boxH - 6}" stroke="#9aa3b2"/>`);
-  parts.push(`<line x1="${x(wHi)}" y1="${boxY + 6}" x2="${x(wHi)}" y2="${boxY + boxH - 6}" stroke="#9aa3b2"/>`);
-  parts.push(`<rect x="${x(q1)}" y="${boxY}" width="${x(q3) - x(q1)}" height="${boxH}" fill="rgba(106,208,240,.16)" stroke="#6ad0f0"/>`);
-  parts.push(`<line x1="${x(q2)}" y1="${boxY}" x2="${x(q2)}" y2="${boxY + boxH}" stroke="#6ee7a3" stroke-width="2"/>`);
-  parts.push(`<text x="${x(q1)}" y="${boxY - 6}" fill="#9aa3b2" font-size="10" text-anchor="middle">Q1</text>`);
-  parts.push(`<text x="${x(q3)}" y="${boxY - 6}" fill="#9aa3b2" font-size="10" text-anchor="middle">Q3</text>`);
-  parts.push(`<text x="${x(q2)}" y="${boxY + boxH + 13}" fill="#6ee7a3" font-size="10" text-anchor="middle">median</text>`);
-  parts.push(`<text x="${padX}" y="${H - 8}" fill="#9aa3b2" font-size="10">value (standard deviations from 0)</text>`);
-  svg.innerHTML = parts.join('');
-}
-groupToggle(document.getElementById('olRule'), 'r', r => {
-  olRule = r;
-  const k = document.getElementById('olK');
-  k.value = r === 'iqr' ? 1.5 : 3;
-  olK = +k.value;
-  refreshOL();
-});
-groupToggle(document.getElementById('olAction'), 'a', a => { olAction = a; refreshOL(); });
-document.getElementById('olK').addEventListener('input', e => { olK = +e.target.value; refreshOL(); });
-refreshOL();
-
-/* ========================= TAB 5 — transform ========================= */
-const foods = ['bacon', 'pulled pork', 'bacon', 'pastrami', 'corned beef', 'bacon', 'pastrami', 'honey ham', 'nova lox'];
-const ounces = [4, 3, 12, 6, 7.5, 8, 3, 5, 6];
-const meatToAnimal = {
-  'bacon': 'pig', 'pulled pork': 'pig', 'pastrami': 'cow',
-  'corned beef': 'cow', 'honey ham': 'pig', 'nova lox': 'salmon',
-};
-function renderMap(mapped) {
-  renderDF(document.getElementById('mapTable'), {
-    index: foods.map((_, i) => i),
-    columns: mapped ? ['food', 'ounces', 'animal'] : ['food', 'ounces'],
-    values: foods.map((f, i) => mapped ? [f, ounces[i], meatToAnimal[f] ?? NA] : [f, ounces[i]]),
-  }, { cellClass: (ri, ci) => mapped && ci === 2 ? 'fixed' : null });
-}
-renderMap(false);
-document.getElementById('mapRun').addEventListener('click', () => renderMap(true));
-document.getElementById('mapReset').addEventListener('click', () => renderMap(false));
-
-const repBase = [1, -999, 2, -999, -1000, 3];
-function refreshRep(mode) {
-  let vals;
-  if (mode === 'one')       vals = repBase.map(v => v === -999 ? NA : v);
-  else if (mode === 'list') vals = repBase.map(v => (v === -999 || v === -1000) ? NA : v);
-  else if (mode === 'dict') vals = repBase.map(v => v === -999 ? NA : (v === -1000 ? 0 : v));
-  else                      vals = [...repBase];
-  document.getElementById('repOut').textContent =
-    vals.map((v, i) => `${i}    ${isNA(v) ? 'NaN' : fmt(v)}`).join('\n')
-    + '\ndtype: ' + (vals.some(isNA) ? 'float64' : 'int64');
-  const used = nums(vals);
-  document.getElementById('repMean').textContent = fmt(mean(used), 2);
-  document.getElementById('repN').textContent = used.length + ' / 6';
-}
-groupToggle(document.getElementById('repBtns'), 'r', refreshRep);
-refreshRep('orig');
-
-const reSamples = [
-  ['Dave',  'dave@google.com'],
-  ['Steve', 'steve@gmail.com'],
-  ['Rob',   'rob@gmail.com'],
-  ['Wes',   NA],
-  ['Nina',  'Price: $45.99 - nina@shop.co'],
+/* ================================================================
+   PART 3 — LESSON 1.9, pivot builder
+   ================================================================ */
+const TXNS = [
+  {outlet:'Bugis',   daypart:'Morning',   weekday:'Wkday', amount:12.5},
+  {outlet:'Bugis',   daypart:'Morning',   weekday:'Wkday', amount:9.0},
+  {outlet:'Bugis',   daypart:'Afternoon', weekday:'Wkday', amount:4.5},
+  {outlet:'Bugis',   daypart:'Afternoon', weekday:'Wkend', amount:5.0},
+  {outlet:'Bugis',   daypart:'Evening',   weekday:'Wkend', amount:18.0},
+  {outlet:'Bugis',   daypart:'Evening',   weekday:'Wkday', amount:16.0},
+  {outlet:'Orchard', daypart:'Morning',   weekday:'Wkday', amount:14.0},
+  {outlet:'Orchard', daypart:'Morning',   weekday:'Wkend', amount:15.5},
+  {outlet:'Orchard', daypart:'Afternoon', weekday:'Wkday', amount:11.0},
+  {outlet:'Orchard', daypart:'Afternoon', weekday:'Wkend', amount:13.5},
+  {outlet:'Orchard', daypart:'Evening',   weekday:'Wkend', amount:22.0},
+  {outlet:'Orchard', daypart:'Evening',   weekday:'Wkday', amount:19.0},
+  {outlet:'Tampines',daypart:'Morning',   weekday:'Wkday', amount:8.5},
+  {outlet:'Tampines',daypart:'Morning',   weekday:'Wkend', amount:7.0},
+  {outlet:'Tampines',daypart:'Afternoon', weekday:'Wkday', amount:9.5},
+  {outlet:'Tampines',daypart:'Afternoon', weekday:'Wkend', amount:10.0},
+  {outlet:'Tampines',daypart:'Evening',   weekday:'Wkday', amount:12.0},
+  {outlet:'Tampines',daypart:'Evening',   weekday:'Wkend', amount:13.0},
+  {outlet:'Jurong',  daypart:'Morning',   weekday:'Wkday', amount:10.5},
+  {outlet:'Jurong',  daypart:'Morning',   weekday:'Wkend', amount:11.5},
+  {outlet:'Jurong',  daypart:'Afternoon', weekday:'Wkday', amount:6.0},
+  {outlet:'Jurong',  daypart:'Afternoon', weekday:'Wkend', amount:6.5},
+  {outlet:'Jurong',  daypart:'Evening',   weekday:'Wkday', amount:15.0},
+  {outlet:'Jurong',  daypart:'Evening',   weekday:'Wkend', amount:16.5}
 ];
-const reInput = document.getElementById('reInput'), reCase = document.getElementById('reCase');
-function refreshRe() {
-  let rx = null, err = null;
-  try { rx = new RegExp(reInput.value, reCase.checked ? 'i' : ''); }
-  catch (e) { err = e.message; }
-  let ngroups = 0;
-  if (!err) { try { ngroups = new RegExp(rx.source + '|').exec('').length - 1; } catch (e) { ngroups = 0; } }
-  const cols = ['data'];
-  for (let g = 0; g < ngroups; g++) cols.push(String(g));
-  const values = reSamples.map(([, s]) => {
-    const row = [isNA(s) ? NA : s];
-    for (let g = 0; g < ngroups; g++) {
-      if (err || isNA(s)) { row.push(NA); continue; }
-      const m = s.match(rx);
-      row.push(m && m[g + 1] !== undefined ? m[g + 1] : NA);
-    }
-    return row;
-  });
-  renderDF(document.getElementById('reTable'),
-    { index: reSamples.map(r => r[0]), columns: cols, values },
-    { cellClass: (ri, ci) => ci > 0 ? 'hl' : null });
+const ORDER = { outlet:['Bugis','Orchard','Tampines','Jurong'], daypart:['Morning','Afternoon','Evening'], weekday:['Wkday','Wkend'] };
 
-  const out = document.getElementById('reOut');
-  if (err) { out.textContent = '⚠️ invalid pattern: ' + err; out.classList.add('err'); }
-  else {
-    out.classList.remove('err');
-    out.textContent = `data.str.extract(r"${reInput.value}"${reCase.checked ? ', flags=re.IGNORECASE' : ''})`
-      + `\n→ ${ngroups} capture group${ngroups === 1 ? '' : 's'} = ${ngroups} new column${ngroups === 1 ? '' : 's'}`;
+function aggregate(rows, fn, countMode) {
+  if (!rows.length) return null;
+  if (countMode || fn === 'count') return rows.length;
+  const v = rows.map(r => r.amount);
+  if (fn === 'sum') return v.reduce((a,b) => a+b, 0);
+  if (fn === 'max') return Math.max(...v);
+  return v.reduce((a,b) => a+b, 0) / v.length;
+}
+const fmt = (x, countMode, fn) => x === null ? '—' : (countMode || fn === 'count' ? String(x) : x.toFixed(1));
+
+function renderPivot() {
+  const idx = document.getElementById('pv-index').value;
+  let col = document.getElementById('pv-cols').value;
+  const valSel = document.getElementById('pv-val').value;
+  const agg = document.getElementById('pv-agg').value;
+  const margins = document.getElementById('pv-marg').value === 'yes';
+  const countMode = valSel === '__count__';
+  if (col === idx) col = '';
+
+  // code line
+  let code;
+  if (countMode && !margins && col) {
+    code = `pd.crosstab(df['${idx}'], df['${col}'])`;
+  } else if (!col) {
+    code = `df.groupby('${idx}')['amount'].${agg === 'count' || countMode ? 'count' : agg}()`;
+  } else {
+    code = `pd.pivot_table(df, index='${idx}', columns='${col}',\n               values='amount', aggfunc='${countMode ? 'count' : agg}'${margins ? ', margins=True' : ''})`;
   }
-  document.getElementById('reLegend').textContent = ngroups === 0
-    ? 'This pattern has no capture groups, so .str.extract() would have nothing to return. Add parentheses around the part you want to keep.'
-    : 'Each capture group becomes a numbered column. Rows where the pattern does not match — or that were NaN to begin with — come back as NaN.';
-}
-reInput.addEventListener('input', refreshRe);
-reCase.addEventListener('change', refreshRe);
-document.querySelectorAll('[data-re]').forEach(b =>
-  b.addEventListener('click', () => { reInput.value = b.dataset.re; refreshRe(); }));
-refreshRe();
+  document.getElementById('pv-code').textContent = code;
 
-/* ========================= TAB 6 — reading files ========================= */
-const files = {
-  ex1: {
-    name: 'ex1.csv',
-    text: `a,b,c,d,message
-1,2,3,4,hello
-5,6,7,8,world
-9,10,11,12,foo`,
-    params: ['index_col'],
-    note: 'The happy path: a header row and comma separators. read_csv guesses correctly with no arguments at all.',
-  },
-  ex2: {
-    name: 'ex2.csv',
-    text: `1,2,3,4,hello
-5,6,7,8,world
-9,10,11,12,foo`,
-    params: ['header', 'names', 'index_col'],
-    note: 'No header row. With no arguments, pandas would steal your first data row and use it as column names — losing a row of data silently.',
-  },
-  ex3: {
-    name: 'ex3.txt',
-    text: `A         B         C
-aaa -0.264438 -1.026059 -0.619500
-bbb  0.927272  0.302904 -0.032399
-ccc -0.264273 -0.386314 -0.217601
-ddd -0.871858 -0.348382  1.100491`,
-    params: ['sep'],
-    note: 'Columns are separated by a variable number of spaces, and the header has one fewer field than the data rows — so pandas uses that first column as the index automatically.',
-  },
-  ex4: {
-    name: 'ex4.csv',
-    text: `# hey!
-a,b,c,d,message
-# just wanted to make things more difficult for you
-# who reads CSV files with computers, anyway?
-1,2,3,4,hello
-5,6,7,8,world
-9,10,11,12,foo`,
-    params: ['skiprows'],
-    note: 'Comment lines scattered through the file. skiprows=[0, 2, 3] removes them by line number so the real header lands on top.',
-  },
-  ex5: {
-    name: 'ex5.csv',
-    text: `something,a,b,c,d,message
-one,1,2,3,4,NA
-two,5,6,,8,world
-three,9,10,11,12,NULL`,
-    params: ['na_values'],
-    note: 'Missing data arrives in three disguises: an empty field, the text "NA", and the text "NULL". By default pandas recognises all three. Turn on na_values to redefine them per column — note that "two" then becomes NaN, and the empty field does not.',
-  },
-};
-const paramDefs = {
-  header:    { label: 'header=None', def: false },
-  names:     { label: 'names=["a","b","c","d","message"]', def: false },
-  index_col: { label: 'index_col="message"', def: false },
-  sep:       { label: 'sep="\\s+"', def: true },
-  skiprows:  { label: 'skiprows=[0, 2, 3]', def: true },
-  na_values: { label: 'na_values={"message": ["NULL","NA"], "something": ["two"]}, keep_default_na=False', def: false },
-};
-let ioFile = 'ex1', ioState = {};
-function ioResetState() {
-  ioState = {};
-  files[ioFile].params.forEach(p => ioState[p] = paramDefs[p].def);
+  const rowKeys = ORDER[idx];
+  const colKeys = col ? ORDER[col] : [null];
+  const tbl = document.getElementById('pv-table');
+  tbl.innerHTML = '';
+
+  const head = document.createElement('tr');
+  const corner = document.createElement('td');
+  corner.className = 'hdr';
+  corner.textContent = col ? idx + ' \\ ' + col : idx;
+  head.appendChild(corner);
+  colKeys.forEach(c => { const td = document.createElement('td'); td.className = 'hdr'; td.textContent = c === null ? (countMode ? 'count' : agg) : c; head.appendChild(td); });
+  if (margins && col) { const td = document.createElement('td'); td.className = 'hdr'; td.textContent = 'All'; head.appendChild(td); }
+  tbl.appendChild(head);
+
+  rowKeys.forEach(rk => {
+    const tr = document.createElement('tr');
+    const rh = document.createElement('td'); rh.className = 'rowhdr'; rh.textContent = rk; tr.appendChild(rh);
+    colKeys.forEach(ck => {
+      const subset = TXNS.filter(r => r[idx] === rk && (ck === null || r[col] === ck));
+      const td = document.createElement('td');
+      td.className = 'val';
+      td.textContent = fmt(aggregate(subset, agg, countMode), countMode, agg);
+      tr.appendChild(td);
+    });
+    if (margins && col) {
+      const subset = TXNS.filter(r => r[idx] === rk);
+      const td = document.createElement('td'); td.className = 'marg';
+      td.textContent = fmt(aggregate(subset, agg, countMode), countMode, agg);
+      tr.appendChild(td);
+    }
+    tbl.appendChild(tr);
+  });
+
+  if (margins && col) {
+    const tr = document.createElement('tr');
+    const rh = document.createElement('td'); rh.className = 'rowhdr'; rh.textContent = 'All'; tr.appendChild(rh);
+    colKeys.forEach(ck => {
+      const subset = TXNS.filter(r => ck === null || r[col] === ck);
+      const td = document.createElement('td'); td.className = 'marg';
+      td.textContent = fmt(aggregate(subset, agg, countMode), countMode, agg);
+      tr.appendChild(td);
+    });
+    const td = document.createElement('td'); td.className = 'marg';
+    td.textContent = fmt(aggregate(TXNS, agg, countMode), countMode, agg);
+    tr.appendChild(td);
+    tbl.appendChild(tr);
+  }
+
+  // reading guide
+  let read = '';
+  if (!col) {
+    read = `<div class="tag">How to read it</div>One dimension, one number per group — this is a plain <code>groupby</code>. Split the 24 rows by <strong>${idx}</strong>, apply <strong>${countMode ? 'count' : agg}</strong>, combine into a table. Add a second dimension to turn it into a pivot table.`;
+  } else if (countMode && !margins) {
+    read = `<div class="tag">How to read it</div>You are counting rows, not summarising a value — that is exactly what <code>pd.crosstab()</code> is for. Useful for "how often do these two things occur together?"`;
+  } else {
+    read = `<div class="tag">How to read it</div>Every cell is a group of transactions squashed into one number: rows split by <strong>${idx}</strong>, columns by <strong>${col}</strong>, then <strong>${countMode ? 'count' : agg}</strong> applied to <code>amount</code>. ${margins ? 'The blue <code>All</code> row and column are the margins — the totals pandas computed for you.' : 'Switch margins on to get the totals without computing them by hand.'}`;
+  }
+  if (idx === 'outlet' && col === 'daypart' && agg === 'mean' && !countMode) {
+    read += `<div class="tag">In the café</div><span class="sc">There it is: the Bugis afternoon cell reads 4.8 against Orchard's 12.3 — less than half the average basket. That single cell is the finding — and Lesson 1.10 is about making the owner see it in five seconds.</span>`;
+  }
+  read += `<div class="tag">Careful</div><code>mean</code> and <code>sum</code> answer different questions. A high <code>sum</code> can just mean high traffic; a low <code>mean</code> means each visit is worth less. Always check <code>count</code> alongside.`;
+  document.getElementById('pv-read').innerHTML = read;
 }
-function ioRenderParams() {
-  const box = document.getElementById('ioParams');
+['pv-index','pv-cols','pv-val','pv-agg','pv-marg'].forEach(id =>
+  document.getElementById(id).addEventListener('change', renderPivot));
+renderPivot();
+
+/* --- the other 1.9 moves --- */
+const MOVES19 = STAGES.find(s => s.id === 'shape').moves.filter(m => ['time','merge','reshape','corr'].includes(m.id));
+let sel19 = null;
+function render19() {
+  const box = document.getElementById('p19-chips');
   box.innerHTML = '';
-  files[ioFile].params.forEach(p => {
-    const l = document.createElement('label');
-    l.className = 'chk';
-    l.innerHTML = `<input type="checkbox" ${ioState[p] ? 'checked' : ''} /> <code>${paramDefs[p].label}</code>`;
-    l.querySelector('input').addEventListener('change', e => { ioState[p] = e.target.checked; ioRun(); });
-    box.appendChild(l);
+  MOVES19.forEach(m => {
+    const c = document.createElement('div');
+    c.className = 'chip' + (sel19 === m.id ? ' sel' : '');
+    c.textContent = m.label;
+    c.addEventListener('click', () => { sel19 = m.id; render19(); });
+    box.appendChild(c);
   });
+  const m = MOVES19.find(x => x.id === sel19);
+  document.getElementById('p19-code').textContent = m ? m.code : 'Click a move.';
+  document.getElementById('p19-why').innerHTML = m
+    ? `<div class="tag">Why it exists</div>${m.why}<div class="tag">In the café</div><span class="sc">${m.sc}</span>`
+    : '';
 }
-function coerce(body) {
-  const defaultNA = ['', 'NA', 'NULL', 'NaN', 'nan'];
-  return body.map(r => r.map((cell, ci) => {
-    const t = cell.trim();
-    if (ioState.na_values) {
-      // keep_default_na=False: only the declared sentinels count as missing
-      if (ci === 0 && t === 'two') return NA;          // column "something"
-      if (t === 'NULL' || t === 'NA') return NA;       // column "message"
-      if (t === '') return '';                         // empty is no longer NaN
-    } else if (defaultNA.includes(t)) return NA;
-    const n = Number(t);
-    return t !== '' && !isNaN(n) ? n : t;
-  }));
-}
-function ioFinish(df, indexName) {
-  renderDF(document.getElementById('ioTable'), df, { indexName });
-  const f = files[ioFile];
-  const args = f.params.filter(p => ioState[p]).map(p => paramDefs[p].label);
-  document.getElementById('ioCall').textContent =
-    `pd.read_csv("../data/${f.name}"${args.length ? ',\n            ' + args.join(',\n            ') : ''})`;
-  document.getElementById('ioNote').textContent = f.note;
-}
-function ioRun() {
-  const f = files[ioFile];
-  document.getElementById('ioRaw').textContent = f.text;
-  let lines = f.text.split('\n');
-  if (ioState.skiprows) lines = lines.filter((_, i) => ![0, 2, 3].includes(i));
-  const splitLine = s => ioState.sep ? s.trim().split(/\s+/) : s.split(',');
-  const rows = lines.filter(l => l.length).map(splitLine);
+render19();
 
-  let columns, body;
-  if (ioState.names)       { columns = ['a', 'b', 'c', 'd', 'message']; body = rows; }
-  else if (ioState.header) { columns = rows[0].map((_, i) => String(i)); body = rows; }
-  else {
-    columns = rows[0]; body = rows.slice(1);
-    // header shorter than the data rows → pandas promotes the first field to the index
-    if (body.length && body[0].length === columns.length + 1) {
-      const idx = body.map(r => r[0]);
-      ioFinish({ index: idx, columns, values: coerce(body.map(r => r.slice(1))) }, '');
-      return;
-    }
-  }
-  let index = body.map((_, i) => i), indexName = '';
-  if (ioState.index_col) {
-    const ci = columns.indexOf('message');
-    if (ci >= 0) {
-      index = body.map(r => r[ci]);
-      indexName = 'message';
-      columns = columns.filter((_, i) => i !== ci);
-      body = body.map(r => r.filter((_, i) => i !== ci));
-    }
-  }
-  ioFinish({ index, columns, values: coerce(body) }, indexName);
+/* ================================================================
+   PART 4 — LESSON 1.10, chart chooser
+   ================================================================ */
+function sketch(bars) { return bars; }
+const VIZ = [
+  { id:'compare', label:'Compare groups against each other',
+    chart:'Bar chart (horizontal if the labels are long)',
+    code:"sns.barplot(data=summary, x='amount', y='outlet', color='#9aa0c3')\n# then recolour the one bar that carries the message",
+    why:'Length on a common baseline is the most accurate visual comparison a human can make — far more accurate than angle (pie) or area (bubbles). Sort the bars by value; alphabetical order hides the ranking.',
+    sc:'Four outlets, sorted, Bugis in accent colour and the rest grey. The message reads itself.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g font-family="monospace" font-size="9" fill="#9aa0c3">
+      <rect x="60" y="16" width="170" height="16" rx="3" fill="#3b4170"/><text x="6" y="28">Orchard</text>
+      <rect x="60" y="46" width="130" height="16" rx="3" fill="#3b4170"/><text x="6" y="58">Jurong</text>
+      <rect x="60" y="76" width="115" height="16" rx="3" fill="#3b4170"/><text x="6" y="88">Tampines</text>
+      <rect x="60" y="106" width="62" height="16" rx="3" fill="#ffd166"/><text x="6" y="118">Bugis</text>
+      <line x1="59" y1="10" x2="59" y2="130" stroke="#2a2f55"/></g></svg>` },
+  { id:'trend', label:'Show change over time',
+    chart:'Line chart (add a rolling mean if it is noisy)',
+    code:"fig, ax = plt.subplots(figsize=(8,4))\nax.plot(monthly.index, monthly.values, color='#9aa0c3')\nax.plot(monthly.index, monthly.rolling(3).mean(), color='#ffd166')\nax.set_ylim(0, None)",
+    why:'Position along a shared axis reads as continuity, so lines say "this flowed into that". Bars over time invite comparison of individual periods instead of the shape of the trend.',
+    sc:'Raw monthly revenue in grey, 3-month rolling mean in accent. Start the y-axis at zero or the flatness will look like a crash.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g fill="none" stroke-width="2">
+      <polyline points="30,95 70,70 110,100 150,72 190,98 230,68 270,92" stroke="#3b4170"/>
+      <polyline points="30,88 70,86 110,87 150,85 190,86 230,84 270,85" stroke="#ffd166"/></g>
+      <line x1="26" y1="130" x2="285" y2="130" stroke="#2a2f55"/><line x1="26" y1="14" x2="26" y2="130" stroke="#2a2f55"/>
+      <text x="34" y="26" font-family="monospace" font-size="9" fill="#9aa0c3">flat trend, noisy months</text></svg>` },
+  { id:'dist', label:'Show the spread of one number',
+    chart:'Histogram — or a boxplot when comparing spreads',
+    code:"sns.histplot(df, x='amount', bins=20)\nsns.boxplot(df, x='outlet', y='amount')",
+    why:'An average hides everything interesting. A histogram shows the shape — is it one hump, two, or a long tail? A boxplot compresses each group to median, quartiles and outliers, so several groups fit side by side.',
+    sc:'"Average basket S$12" is a fine headline until the histogram shows two humps: coffee runs and catering orders. Those are two businesses.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g fill="#3b4170">
+      <rect x="40" y="105" width="22" height="25" rx="2"/><rect x="66" y="70" width="22" height="60" rx="2"/>
+      <rect x="92" y="40" width="22" height="90" rx="2" fill="#ffd166"/><rect x="118" y="62" width="22" height="68" rx="2"/>
+      <rect x="144" y="92" width="22" height="38" rx="2"/><rect x="170" y="112" width="22" height="18" rx="2"/>
+      <rect x="196" y="120" width="22" height="10" rx="2"/><rect x="222" y="124" width="22" height="6" rx="2"/></g>
+      <line x1="36" y1="130" x2="285" y2="130" stroke="#2a2f55"/>
+      <text x="200" y="60" font-family="monospace" font-size="9" fill="#9aa0c3">long tail →</text></svg>` },
+  { id:'rel', label:'Show how two numbers relate',
+    chart:'Scatter plot (add a trend line only if it is meaningful)',
+    code:"sns.scatterplot(df, x='party_size', y='amount')\nsns.regplot(df, x='party_size', y='amount')  # if a linear fit is defensible",
+    why:'Position in two dimensions is the only encoding that shows a relationship directly. Correlation gives you one number; the scatter shows whether that number is trustworthy or an artefact of a few extreme points.',
+    sc:'Party size vs bill: a clear upward cloud. Party size vs tip <em>rate</em>: a shapeless blob. Same correlation table, very different stories.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g fill="#3b4170">
+      <circle cx="55" cy="112" r="4"/><circle cx="72" cy="104" r="4"/><circle cx="88" cy="108" r="4"/><circle cx="104" cy="92" r="4"/>
+      <circle cx="122" cy="86" r="4"/><circle cx="140" cy="90" r="4"/><circle cx="158" cy="72" r="4"/><circle cx="176" cy="64" r="4"/>
+      <circle cx="196" cy="66" r="4"/><circle cx="214" cy="48" r="4"/><circle cx="234" cy="42" r="4"/><circle cx="252" cy="36" r="4"/></g>
+      <line x1="50" y1="118" x2="258" y2="32" stroke="#ffd166" stroke-width="2" stroke-dasharray="5 4"/>
+      <line x1="40" y1="130" x2="285" y2="130" stroke="#2a2f55"/><line x1="40" y1="14" x2="40" y2="130" stroke="#2a2f55"/></svg>` },
+  { id:'twodim', label:'Show a value across two categories',
+    chart:'Heatmap, or a grouped bar chart',
+    code:"grid = pd.pivot_table(df, index='outlet', columns='daypart', values='amount', aggfunc='mean')\nsns.heatmap(grid, annot=True, fmt='.1f', cmap='YlOrBr')",
+    why:'A heatmap makes colour do the comparing, so a 4×3 grid can be scanned in one glance. It is weaker for precise values — which is why you annotate the numbers on top. Grouped bars are better when precision matters more than pattern.',
+    sc:'Outlet × daypart, annotated. One pale cell — Bugis afternoons — and the whole analysis lands without a word of explanation.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g font-family="monospace" font-size="8" fill="#9aa0c3">
+      <text x="66" y="20">Morn</text><text x="126" y="20">Aft</text><text x="186" y="20">Eve</text>
+      <text x="6" y="42">Bugis</text><text x="6" y="72">Orchard</text><text x="6" y="102">Tampines</text><text x="6" y="132">Jurong</text></g>
+      <g><rect x="60" y="28" width="52" height="22" rx="3" fill="#b98b2e"/><rect x="120" y="28" width="52" height="22" rx="3" fill="#3b4170"/><rect x="180" y="28" width="52" height="22" rx="3" fill="#ffd166"/>
+      <rect x="60" y="58" width="52" height="22" rx="3" fill="#d9a63c"/><rect x="120" y="58" width="52" height="22" rx="3" fill="#8d6b28"/><rect x="180" y="58" width="52" height="22" rx="3" fill="#ffd166"/>
+      <rect x="60" y="88" width="52" height="22" rx="3" fill="#6b5320"/><rect x="120" y="88" width="52" height="22" rx="3" fill="#7d6024"/><rect x="180" y="88" width="52" height="22" rx="3" fill="#c39530"/>
+      <rect x="60" y="118" width="52" height="22" rx="3" fill="#8d6b28"/><rect x="120" y="118" width="52" height="22" rx="3" fill="#2a2f55"/><rect x="180" y="118" width="52" height="22" rx="3" fill="#d9a63c"/></g>
+      <rect x="120" y="28" width="52" height="22" rx="3" fill="none" stroke="#ef476f" stroke-width="2"/></svg>` },
+  { id:'part', label:'Show parts of a whole',
+    chart:'Stacked bar — almost never a pie chart',
+    code:"grid.plot(kind='bar', stacked=True, ax=ax)\n# 100% stacked if the share matters more than the total",
+    why:'Humans compare angles and areas badly, so pies fail past two or three slices. A stacked bar keeps one shared baseline, so at least the bottom segment stays comparable. If every segment must be compared, use small multiples instead.',
+    sc:'Payment mix per outlet: stacked bars. If the question is "is cash declining?", plot cash share as a line instead.',
+    svg:`<svg viewBox="0 0 300 150" width="100%"><g>
+      <rect x="50" y="60" width="34" height="70" rx="3" fill="#3b4170"/><rect x="50" y="30" width="34" height="30" rx="3" fill="#ffd166"/>
+      <rect x="110" y="72" width="34" height="58" rx="3" fill="#3b4170"/><rect x="110" y="38" width="34" height="34" rx="3" fill="#ffd166"/>
+      <rect x="170" y="84" width="34" height="46" rx="3" fill="#3b4170"/><rect x="170" y="52" width="34" height="32" rx="3" fill="#ffd166"/>
+      <rect x="230" y="90" width="34" height="40" rx="3" fill="#3b4170"/><rect x="230" y="66" width="34" height="24" rx="3" fill="#ffd166"/></g>
+      <line x1="40" y1="130" x2="285" y2="130" stroke="#2a2f55"/>
+      <text x="46" y="146" font-family="monospace" font-size="8" fill="#9aa0c3">shared baseline keeps the bottom segment readable</text></svg>` }
+];
+
+let selViz = null;
+function renderViz() {
+  const box = document.getElementById('q110-buttons');
+  box.innerHTML = '';
+  VIZ.forEach(v => {
+    const b = document.createElement('button');
+    b.textContent = v.label;
+    if (selViz === v.id) b.classList.add('on');
+    b.addEventListener('click', () => { selViz = v.id; renderViz(); });
+    box.appendChild(b);
+  });
+  const v = VIZ.find(x => x.id === selViz);
+  document.getElementById('viz-sketch').innerHTML = v ? v.svg :
+    `<div style="color:var(--ink-dim);font-size:13px;padding:24px 8px;text-align:center">Say what you are trying to show and the chart appears here.</div>`;
+  document.getElementById('viz-code').textContent = v ? v.code : 'Pick a message on the left.';
+  document.getElementById('viz-why').innerHTML = v
+    ? `<div class="tag">Chart</div><strong>${v.chart}</strong>
+       <div class="tag">Why it works (perception)</div>${v.why}
+       <div class="tag">In the café</div><span class="sc">${v.sc}</span>`
+    : '';
 }
-groupToggle(document.getElementById('ioFiles'), 'f', f => { ioFile = f; ioResetState(); ioRenderParams(); ioRun(); });
-ioResetState(); ioRenderParams(); ioRun();
+renderViz();
+
+const PILLARS = [
+  { id:'perception', label:'Perception',
+    why:'What the eye decodes before the brain reads. Pre-attentive attributes — colour, length, position, size — are processed in milliseconds. Use exactly one of them to carry your message; use the rest as background. Roughly 8% of men have some colour-vision deficiency, so never let red-vs-green alone carry meaning.' },
+  { id:'design', label:'Design',
+    why:'Removing everything that is not the message. Kill gridlines you do not need, label the lines directly instead of using a legend, and title the chart with the <em>finding</em> ("Bugis afternoons are the gap") rather than the variables ("Revenue by outlet and daypart"). Every pixel you delete makes the remaining ones louder.' },
+  { id:'story', label:'Storytelling',
+    why:'The three-act shape: <strong>setup</strong> (here is the business context), <strong>conflict</strong> (here is the gap in the data), <strong>resolution</strong> (here is what to do about it). A chart without an act structure is a fact; a chart inside one is a decision. And integrity is part of the story — a truncated axis or a distorted scale buys you attention once and costs you your credibility.' }
+];
+let selPil = null;
+function renderPillars() {
+  const box = document.getElementById('pillar-chips');
+  box.innerHTML = '';
+  PILLARS.forEach(p => {
+    const c = document.createElement('div');
+    c.className = 'chip' + (selPil === p.id ? ' sel' : '');
+    c.textContent = p.label;
+    c.addEventListener('click', () => { selPil = p.id; renderPillars(); });
+    box.appendChild(c);
+  });
+  const p = PILLARS.find(x => x.id === selPil);
+  document.getElementById('pillar-why').innerHTML = p ? p.why : 'Click a pillar.';
+}
+renderPillars();
+
+document.getElementById('ready').textContent = 'Ready';
 </script>
 </body>
 </html>
