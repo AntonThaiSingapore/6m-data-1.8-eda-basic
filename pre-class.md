@@ -7,7 +7,7 @@
 
 🎯 **Goal:** Understand the core concepts of investigating and cleaning data.
 
-🎬 Watch this video: [[EDA with Pandas]](https://youtu.be/4-VoOWSFwOQ)
+🎬 Watch this video: [[EDA Basic: The Data Health Check]](https://youtu.be/PlOwlaqjLBY?si=a_G-OlKDWTwQdUX0)
 
 ## **1\. What is EDA? (5 Minutes)**
 
