@@ -2,6 +2,7 @@
 Visualization for Handling Duplicates
 Shows how to identify and remove duplicate data
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -251,6 +252,6 @@ for i in range(len(summary_data)):
 
 ax8.set_title('Duplicates Summary', fontweight='bold', pad=20, fontsize=11)
 
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/06_duplicates.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '06_duplicates.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 06_duplicates.png")

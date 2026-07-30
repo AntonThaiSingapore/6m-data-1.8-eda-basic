@@ -1,6 +1,6 @@
 # 📚 Lesson 1.8: EDA Basic — Exploratory Data Analysis
 
-**Theme:** The Health Check — inspecting, cleaning, and understanding your data
+**Theme:** Can I Trust This Data? — inspecting, cleaning, and understanding a raw business export
 
 ---
 
@@ -10,19 +10,33 @@
 
 | Section | Duration | Topic / Activity |
 |---------|----------|-----------------|
-| Setup | 5 min | Imports, load `data/patients.csv`, the "why this matters" hook |
-| **Part 1: Descriptive Statistics** | 33 min | The 5-move first look (`.head`, `.shape`, `.info`, `.dtypes`, `.describe`); `.value_counts()`; reductions |
+| Setup | 5 min | Imports, load `data/cafe_june_raw.csv`, the "why this matters" hook |
+| **Part 1: Descriptive Statistics** | 33 min | The 5-move first look (`.head`, `.shape`, `.info`, `.dtypes`, `.describe`); reductions; `.value_counts()` |
 | ☕ Break | 10 min | |
-| **Part 2: Data Quality** | 42 min | Missing values; duplicates; impossible values & sentinels; fill vs drop vs cap |
+| **Part 2: Data Quality** | 42 min | Text→number conversion; missing values; duplicates; sentinels & impossible values; fill vs drop vs cap |
 | ☕ Break | 10 min | |
 | **Part 3: Data Transformation** | 35 min | Mapping; axis labels; strings & regex; categories & binning; dates; `groupby` |
 | **Part 4: Reading & Writing** | 15 min | CSV, JSON, Excel, databases |
 
-**One dataset, start to finish.** The whole session works on `data/patients.csv` — 38 rows of
-synthetic hospital records with missing values, duplicates, impossible ages, sentinel codes, and
-nine spellings of four ward names. Each section improves the same `clean` table; Part 4 saves it as
-`data/patients_clean.csv`. Small hand-built tables appear alongside as *drills* that isolate one
-method at a time.
+**One business problem, start to finish.**
+
+> **The Daily Grind** is a four-outlet café chain in Singapore. Revenue has been flat for two
+> quarters and the owner must decide whether to renew the Marina Bay lease. She asks for the sales
+> data, and what arrives is a **raw till export**: one row per outlet, per day, per part of the day,
+> straight out of the point-of-sale system, untouched.
+>
+> Today's job is to make that file answerable — and to be able to say *why* every number in it can
+> be trusted.
+
+The whole session works on `data/cafe_june_raw.csv` — 366 rows of June 2025 trading, with twelve
+spellings for four cafés, money stored as text, four sentinel codes, one mis-keyed \$98,000, a
+duplicated batch and holes in six columns. Each section improves the same `clean` table; Part 4
+saves it as `data/cafe_june_clean.csv`. Small hand-built tables appear alongside as *drills* that
+isolate one method at a time.
+
+**The number that makes the case:** the raw file says June took **\$267,987**. It actually took
+about **\$174,753**. Every one of those \$93,000 of error was a two-line fix, and none of them
+announced itself.
 
 ---
 
@@ -37,14 +51,65 @@ By the end of this lesson, you will be able to:
 
 ---
 
+## 🧭 The habit this lesson teaches
+
+Every fix in Part 2 and Part 3 follows the same four beats:
+
+**find it → decide → apply → verify**
+
+| Beat | What it means |
+|---|---|
+| **Find it** | a line of code that shows you the problem rows, not just a count |
+| **Decide** | say out loud what the value *means*, then choose fill / drop / cap / mark missing |
+| **Apply** | the one line that changes the data |
+| **Verify** | re-run the check and watch it come back clean |
+
+The habit matters more than any single method. Lesson 1.9 has its own four beats for summarising
+(*question → grain → aggregation → check*), built on this one.
+
+---
+
 ## 📂 Course Materials
 
 | Material | Description | Est. Time |
 |----------|-------------|-----------|
-| [Pre-Class](./pre-class.md) | What EDA is; statistics concepts; regex intro; environment setup | 30–45 min |
+| [Pre-Class](./pre-class.md) | What EDA is; statistics concepts; regex intro; environment setup | 35–40 min |
+| [Assignment](./assignment.md) | Audit the May export — clean it and produce a summary | 60–75 min |
 | [Lesson Plan](./lesson.md) | Instructor guide: agenda, timings, teaching notes | 150 min |
-| [Assignment](./assignment.md) | EDA practice challenges — clean and analyse a messy dataset | 45–60 min |
 | [Reference](./reference.md) | Pandas EDA cheat sheet; regex quick reference; deep dives moved out of the notebook | As needed |
+| [Transformation Use Cases](./TRANSFORMATION_USE_CASES.md) | Optional: where each technique shows up in other industries | As needed |
+
+---
+
+## 🗂️ The Data
+
+| File | Rows | What it is |
+|---|---|---|
+| `cafe_june_raw.csv` | 366 | **the spine** — the raw June 2025 till export, uncleaned |
+| `cafe_june_workbook.xlsx` | 2 sheets | the same month plus an outlet reference sheet, for the Excel section |
+| `cafe.db` | 2 tables | SQLite: `daily_sales_june` and `outlets`, for the database section |
+| `ex1.csv` … `ex5.csv`, `ex3.txt` | 4–5 each | small files for the reading drills (no header, comment lines, odd separators, five spellings of "missing") |
+
+Everything is generated by `data/make_cafe_raw.py`, which documents exactly what was broken and why.
+**Outputs:** Part 4 writes `data/cafe_june_clean.csv` and `data/cafe_june_clean.xlsx`.
+
+### What is deliberately wrong with the raw file
+
+| Problem | Detail |
+|---|---|
+| Twelve outlet spellings | `Raffles Place`, `raffles place`, `RAFFLES PLACE`, `Raffles Pl.`… for four cafés |
+| Nine daypart labels | `Morning`, `morning`, `AM`, `Midday`, `Lunch`, `PM`… for three dayparts |
+| Money stored as text | `"S$1,240.50"`, `" 987.20 "`, `"1240.5"` — so `.describe()` cannot see it at all |
+| Sentinel codes | four shifts carry `-999`, meaning "the till failed to close off" |
+| A keying error | one shift reads `98000` instead of about `980.00` |
+| Duplicate rows | six rows: the till re-sent one batch |
+| Missing values | in `revenue_raw`, `tickets`, `items`, `staff_on_shift`, `manager_email`, `notes` |
+| Fake blanks | `notes` uses `N.A.` and `-` for empty, which `.isna()` cannot see |
+| Dates as text | `dd/mm/yyyy`, so `01/06/2025` is ambiguous and sorting is alphabetical |
+
+Nine kinds of mess. Part 1's two-minute routine surfaces five of them straight away; the fake
+blanks, the abbreviations, the sentinel codes and the date ambiguity only give themselves up once you
+start working the list. That progression *is* the lesson.
 
 ---
 
@@ -54,7 +119,22 @@ By the end of this lesson, you will be able to:
 - **[Google Colab](https://colab.research.google.com)** *(alternative)*.
 - **Notebook:** `notebooks/eda_basic.ipynb` — select the `pds` kernel in VS Code.
 - **Environment:** `conda env create -f environment.yml` then `conda activate pds`.
-- **Dataset:** `data/patients.csv` is the lesson spine; `data/` also holds the smaller example files
-  used in Part 4 and the resale-flat workbook and DuckDB database.
 - **Pandas version:** the notebook targets the `pds` environment (pandas 1.5). It avoids APIs removed
   in pandas 2.x, so it also runs on Google Colab.
+- **Regenerate the data** (optional, instructor only): `python data/make_cafe_raw.py`.
+
+---
+
+## ➡️ Where this sits
+
+| Lesson | The question it answers |
+|---|---|
+| **1.8 EDA Basic** | **Can I trust this data?** — types, missing values, duplicates, impossible values |
+| 1.9 EDA Advanced | What is the pattern? — time, joins, reshaping, grouping |
+| 1.10 Visualisation | How do I make them act? — chart choice, design, story |
+
+Lesson 1.9 opens `daily_sales.csv`: the same export for **all 18 months**, cleaned exactly the way
+you clean June today. Your cleaned June total (\$174,753) and 1.9's June figure (\$175,669) differ by
+\$916 — 0.5% — and by the end of today you will be able to name the **eight shifts** that account for
+it: four sentinels, one mis-keyed figure and three blanks, all filled with a median because the export
+had destroyed the original number.

@@ -2,6 +2,7 @@
 Visualization for Missing Data
 Shows patterns and strategies for handling missing values
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -101,7 +102,7 @@ ax5 = fig.add_subplot(gs[1, 2])
 col_with_na = 'B'
 original = data[col_with_na].dropna()
 fill_mean = data[col_with_na].fillna(data[col_with_na].mean())
-fill_forward = data[col_with_na].fillna(method='ffill')
+fill_forward = data[col_with_na].ffill()
 
 ax5.boxplot([original, fill_mean, fill_forward],
             labels=['Original\n(dropna)', 'Fill with\nMean', 'Forward\nFill'],
@@ -171,6 +172,6 @@ for i in range(len(summary_data)):
 
 ax8.set_title('Missing Data Summary', fontweight='bold', pad=20)
 
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/03_missing_data.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '03_missing_data.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 03_missing_data.png")

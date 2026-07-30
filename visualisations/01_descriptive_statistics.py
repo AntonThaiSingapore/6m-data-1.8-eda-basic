@@ -2,6 +2,7 @@
 Visualization for Descriptive Statistics
 Illustrates how describe() statistics relate to visual distributions
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -64,7 +65,7 @@ for idx, (col, title) in enumerate(zip(columns, titles)):
     ax2.grid(True, alpha=0.3, axis='y')
 
 plt.tight_layout()
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/01_descriptive_statistics.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '01_descriptive_statistics.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 01_descriptive_statistics.png")
 
@@ -99,6 +100,6 @@ for i in range(len(desc_table.index)):
     table[(i+1, -1)].set_text_props(weight='bold')
 
 plt.title('DataFrame.describe() Output', fontsize=14, fontweight='bold', pad=20)
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/01_descriptive_statistics_table.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '01_descriptive_statistics_table.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 01_descriptive_statistics_table.png")
