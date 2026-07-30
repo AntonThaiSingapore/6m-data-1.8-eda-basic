@@ -10,7 +10,7 @@
 🎯 **Goal:** understand the core ideas of investigating and cleaning data, so the code in class is
 about *decisions* rather than syntax.
 
-🎬 Watch this video: [[EDA with Pandas]](https://youtu.be/4-VoOWSFwOQ)
+🎬 Watch this video: [[EDA Basic: The Data Health Check]](https://youtu.be/PlOwlaqjLBY?si=a_G-OlKDWTwQdUX0)
 
 ---
 
