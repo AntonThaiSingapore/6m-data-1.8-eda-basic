@@ -1,6 +1,6 @@
 # Reference
 
-- [Interactive EDA Concept Map](https://su-ntu-ctp.github.io/6m-data-1.8-eda-basic/)
+- [Interactive concept map for Lessons 1.8–1.10](https://su-ntu-ctp.github.io/6m-data-1.8-eda-basic/) — the business problem end to end
 - [Beginner's Guide to Statistics](https://www.analyticsvidhya.com/blog/2021/08/a-beginners-guide-to-statistics-for-machine-learning/)
 - [Introduction to Regular Expressions in Python](https://developers.google.com/edu/python/regular-expressions)
 - [Regex Cheatsheet](https://www.dataquest.io/blog/regex-cheatsheet/)
@@ -24,29 +24,30 @@ How pandas stores a categorical: a list of small integer codes plus one lookup t
 ```python
 # 👉 Under the hood a categorical is two pieces: a list of small integer codes...
 #    ...and a lookup table of the actual labels.
-fruit_s = pd.Series([0, 1, 0, 0] * 2)
+drink_s = pd.Series([0, 1, 0, 0] * 2)
 
-dim = pd.Series(["apple", "orange"])
+dim = pd.Series(["latte", "kopi"])
 
-fruit_s
+drink_s
 ```
 
 ```python
-# 👉 The lookup table: position 0 is 'apple', position 1 is 'orange'.
+# 👉 The lookup table: position 0 is 'latte', position 1 is 'kopi'.
 dim
 ```
 
 ```python
 # 👉 `.take()` reads the codes as positions in the lookup table and rebuilds the text.
 #    That is the whole trick -- store 0s and 1s, keep the words only once.
-dim.take(fruit_s)
+dim.take(drink_s)
 ```
 
-The values for `fruit_cat` are now an instance of `pandas.Categorical`, which you can access via the `.array` attribute:
+A column converted with `.astype("category")` is a `pandas.Categorical` underneath, reachable through the `.array` attribute:
 
 ```python
-# 👉 `.array` exposes the underlying storage object so we can look inside it.
-c = fruit_cat.array
+# 👉 Convert a text column, then look inside it.
+drink_cat = pd.Series(["latte", "kopi", "latte", "latte"] * 2).astype("category")
+c = drink_cat.array
 
 type(c)
 ```
@@ -181,9 +182,10 @@ result
 ```
 
 ```python
-# 👉 `skiprows=` throws away the given line numbers before parsing. Counting starts at 0.
-# Skip specific rows by index (0, 2, and 3 here) to get to the clean data
-pd.read_csv("../data/ex4.csv", skiprows=[0, 2, 3])
+# 👉 `skiprows=` throws away the given line numbers before parsing. Counting starts at 0,
+#    so [0, 1] drops the two comment lines and leaves the header where pandas expects it.
+#    `comment="#"` (used in the notebook) is more robust: it does not depend on line numbers.
+pd.read_csv("../data/ex4.csv", skiprows=[0, 1])
 ```
 
 ---

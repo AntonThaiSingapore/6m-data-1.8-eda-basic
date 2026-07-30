@@ -1,4 +1,6 @@
-something,a,b,c,d,message
-one,1,2,3,4,NA
-two,5,6,,8,world
-three,9,10,11,12,NULL
+date,outlet_id,daypart,tickets,revenue_sgd
+2025-06-01,OUT-01,Morning,50,324.52
+2025-06-01,OUT-02,Morning,,NA
+2025-06-01,OUT-03,Morning,NULL,241.90
+2025-06-01,OUT-04,Morning,18,n/a
+2025-06-01,OUT-04,Midday,-999,155.40

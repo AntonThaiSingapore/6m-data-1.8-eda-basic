@@ -2,6 +2,7 @@
 Visualization for Value Counts
 Shows frequency distributions for categorical data
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -131,6 +132,6 @@ for i in range(len(table_data)):
 ax6.set_title('Value Counts - Table View', fontweight='bold', pad=20)
 
 plt.tight_layout()
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/02_value_counts.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '02_value_counts.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 02_value_counts.png")

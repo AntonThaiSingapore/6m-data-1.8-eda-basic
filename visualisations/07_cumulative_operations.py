@@ -2,6 +2,7 @@
 Visualization for Cumulative Operations
 Shows cumsum, cumprod, cummax, cummin and other accumulation methods
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -188,6 +189,6 @@ for i in range(len(summary_data)-1):
 
 ax6.set_title('Cumulative Operations - Summary', fontweight='bold', pad=20, fontsize=12)
 
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/07_cumulative_operations.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '07_cumulative_operations.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 07_cumulative_operations.png")

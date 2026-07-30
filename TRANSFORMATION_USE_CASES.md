@@ -61,7 +61,7 @@ portfolio.groupby('asset_class')['value'].sum()  # Total value by asset class
 ```python
 # Patient records often have missing test results
 patient_data.dropna(subset=['critical_vitals'])  # Keep only complete critical data
-patient_data['blood_pressure'].fillna(method='ffill')  # Use last known value
+patient_data['blood_pressure'].ffill()  # Use last known value
 ```
 
 **Survey Data**

@@ -2,6 +2,7 @@
 Visualization for Categorical Data and Binning
 Shows pd.cut(), pd.qcut(), and categorical data operations
 """
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -217,6 +218,6 @@ for i in range(len(summary_data)-1):
 
 ax9.set_title('Binning and Categorical Methods - Summary', fontweight='bold', pad=20, fontsize=12)
 
-plt.savefig('/Users/jawad/Documents/work/dsai/5m-data-1.8-eda-basic/illustrations/05_categorical_binning.png',
+plt.savefig(os.path.join(os.path.dirname(os.path.abspath(__file__)), '05_categorical_binning.png'),
             dpi=300, bbox_inches='tight')
 print("Saved: 05_categorical_binning.png")

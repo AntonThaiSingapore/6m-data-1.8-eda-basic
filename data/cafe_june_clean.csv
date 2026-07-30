@@ -1,0 +1,361 @@
+date,outlet_name,daypart,tickets,items,revenue_sgd,staff,manager
+2025-06-01,Holland Village,Evening,69.0,96.0,613.92,4.0,Daniel Lim
+2025-06-01,Holland Village,Midday,57.0,82.0,608.41,4.0,Daniel Lim
+2025-06-01,Holland Village,Morning,75.0,106.0,478.6,4.0,Daniel Lim
+2025-06-01,Marina Bay,Evening,7.0,10.0,67.72,1.0,Priya Nair
+2025-06-01,Marina Bay,Midday,19.0,27.0,207.79,2.0,Priya Nair
+2025-06-01,Marina Bay,Morning,40.0,59.0,280.2,3.0,Priya Nair
+2025-06-01,Raffles Place,Evening,9.0,13.0,78.38,1.0,Aisha Rahman
+2025-06-01,Raffles Place,Midday,20.0,30.0,205.21,2.0,Aisha Rahman
+2025-06-01,Raffles Place,Morning,50.0,71.0,324.52,3.0,Aisha Rahman
+2025-06-01,Tampines Mall,Evening,61.0,90.0,615.79,4.0,Wei Ming Tan
+2025-06-01,Tampines Mall,Midday,82.0,119.0,932.35,5.0,Wei Ming Tan
+2025-06-01,Tampines Mall,Morning,80.0,112.0,557.16,5.0,Wei Ming Tan
+2025-06-02,Holland Village,Evening,48.0,70.0,434.69,3.0,Daniel Lim
+2025-06-02,Holland Village,Midday,41.0,59.0,424.62,3.0,Daniel Lim
+2025-06-02,Holland Village,Morning,59.0,92.0,357.44,4.0,Daniel Lim
+2025-06-02,Marina Bay,Evening,18.0,28.0,173.74,2.0,Priya Nair
+2025-06-02,Marina Bay,Midday,36.0,55.0,394.68,3.0,Priya Nair
+2025-06-02,Marina Bay,Morning,96.0,141.0,615.53,5.0,Priya Nair
+2025-06-02,Raffles Place,Evening,53.0,36.0,249.85,2.0,Aisha Rahman
+2025-06-02,Raffles Place,Midday,75.0,109.0,728.37,4.0,Aisha Rahman
+2025-06-02,Raffles Place,Morning,158.0,235.0,1063.87,6.0,Aisha Rahman
+2025-06-02,Tampines Mall,Evening,44.0,67.0,399.67,3.0,Wei Ming Tan
+2025-06-02,Tampines Mall,Midday,54.0,76.0,565.04,3.0,Wei Ming Tan
+2025-06-02,Tampines Mall,Morning,42.0,62.0,275.54,3.0,Wei Ming Tan
+2025-06-03,Holland Village,Evening,39.0,57.0,373.33,3.0,Daniel Lim
+2025-06-03,Holland Village,Midday,31.0,46.0,304.36,2.0,Daniel Lim
+2025-06-03,Holland Village,Morning,50.0,69.0,310.23,3.0,Daniel Lim
+2025-06-03,Marina Bay,Evening,22.0,31.0,193.08,2.0,Priya Nair
+2025-06-03,Marina Bay,Midday,49.0,77.0,497.17,3.0,Priya Nair
+2025-06-03,Marina Bay,Morning,101.0,151.0,698.28,6.0,Priya Nair
+2025-06-03,Raffles Place,Evening,30.0,43.0,273.43,2.0,Aisha Rahman
+2025-06-03,Raffles Place,Midday,77.0,120.0,765.85,5.0,Aisha Rahman
+2025-06-03,Raffles Place,Morning,173.0,254.0,1215.72,6.0,Aisha Rahman
+2025-06-03,Tampines Mall,Evening,43.0,61.0,398.65,3.0,Wei Ming Tan
+2025-06-03,Tampines Mall,Midday,58.0,80.0,597.53,4.0,Wei Ming Tan
+2025-06-03,Tampines Mall,Morning,50.0,67.0,321.89,3.0,Wei Ming Tan
+2025-06-04,Holland Village,Evening,65.0,76.0,582.21,4.0,Daniel Lim
+2025-06-04,Holland Village,Midday,44.0,64.0,465.09,3.0,Daniel Lim
+2025-06-04,Holland Village,Morning,76.0,110.0,482.78,4.0,Daniel Lim
+2025-06-04,Marina Bay,Evening,20.0,30.0,175.0,2.0,Priya Nair
+2025-06-04,Marina Bay,Midday,42.0,62.0,437.74,3.0,Priya Nair
+2025-06-04,Marina Bay,Morning,90.0,135.0,585.09,5.0,Priya Nair
+2025-06-04,Raffles Place,Evening,26.0,37.0,252.88,2.0,Aisha Rahman
+2025-06-04,Raffles Place,Midday,76.0,113.0,462.76,4.0,Aisha Rahman
+2025-06-04,Raffles Place,Morning,175.0,248.0,1182.49,6.0,Aisha Rahman
+2025-06-04,Tampines Mall,Evening,47.0,67.0,405.12,3.0,Wei Ming Tan
+2025-06-04,Tampines Mall,Midday,64.0,93.0,631.38,4.0,Wei Ming Tan
+2025-06-04,Tampines Mall,Morning,55.0,82.0,355.83,3.0,Wei Ming Tan
+2025-06-05,Holland Village,Evening,59.0,87.0,528.62,4.0,Daniel Lim
+2025-06-05,Holland Village,Midday,51.0,70.0,510.46,3.0,Daniel Lim
+2025-06-05,Holland Village,Morning,67.0,100.0,407.81,4.0,Daniel Lim
+2025-06-05,Marina Bay,Evening,20.0,30.0,204.09,2.0,Priya Nair
+2025-06-05,Marina Bay,Midday,48.0,70.0,525.48,3.0,Priya Nair
+2025-06-05,Marina Bay,Morning,83.0,122.0,588.96,5.0,Priya Nair
+2025-06-05,Raffles Place,Evening,29.0,41.0,274.71,2.0,Aisha Rahman
+2025-06-05,Raffles Place,Midday,77.0,104.0,824.33,5.0,Aisha Rahman
+2025-06-05,Raffles Place,Morning,171.0,259.0,1191.11,6.0,Aisha Rahman
+2025-06-05,Tampines Mall,Evening,42.0,62.0,390.04,3.0,Wei Ming Tan
+2025-06-05,Tampines Mall,Midday,63.0,100.0,654.2,4.0,Wei Ming Tan
+2025-06-05,Tampines Mall,Morning,55.0,85.0,356.55,3.0,Wei Ming Tan
+2025-06-06,Holland Village,Evening,65.0,89.0,638.06,4.0,Daniel Lim
+2025-06-06,Holland Village,Midday,52.0,74.0,562.8,3.0,Daniel Lim
+2025-06-06,Holland Village,Morning,53.0,111.0,547.73,5.0,Daniel Lim
+2025-06-06,Marina Bay,Evening,17.0,26.0,165.71,2.0,Priya Nair
+2025-06-06,Marina Bay,Midday,48.0,67.0,507.58,3.0,Priya Nair
+2025-06-06,Marina Bay,Morning,87.0,125.0,582.33,5.0,Priya Nair
+2025-06-06,Raffles Place,Evening,25.0,37.0,232.25,2.0,Aisha Rahman
+2025-06-06,Raffles Place,Midday,66.0,101.0,741.77,4.0,Aisha Rahman
+2025-06-06,Raffles Place,Morning,141.0,215.0,941.37,6.0,Aisha Rahman
+2025-06-06,Tampines Mall,Evening,48.0,65.0,454.15,3.0,Wei Ming Tan
+2025-06-06,Tampines Mall,Midday,64.0,84.0,462.76,4.0,Wei Ming Tan
+2025-06-06,Tampines Mall,Morning,54.0,78.0,373.79,3.0,Wei Ming Tan
+2025-06-07,Holland Village,Evening,54.0,78.0,501.9,3.0,Daniel Lim
+2025-06-07,Holland Village,Midday,45.0,63.0,445.45,3.0,Daniel Lim
+2025-06-07,Holland Village,Morning,59.0,82.0,409.37,4.0,Daniel Lim
+2025-06-07,Marina Bay,Evening,7.0,10.0,67.25,1.0,Priya Nair
+2025-06-07,Marina Bay,Midday,18.0,25.0,201.53,2.0,Priya Nair
+2025-06-07,Marina Bay,Morning,41.0,59.0,269.05,3.0,Priya Nair
+2025-06-07,Raffles Place,Evening,8.0,12.0,68.66,1.0,Aisha Rahman
+2025-06-07,Raffles Place,Midday,18.0,25.0,201.39,2.0,Aisha Rahman
+2025-06-07,Raffles Place,Morning,41.0,54.0,291.96,3.0,Aisha Rahman
+2025-06-07,Tampines Mall,Evening,48.0,68.0,474.37,3.0,Wei Ming Tan
+2025-06-07,Tampines Mall,Midday,61.0,91.0,616.95,4.0,Wei Ming Tan
+2025-06-07,Tampines Mall,Morning,68.0,106.0,462.48,4.0,Wei Ming Tan
+2025-06-08,Holland Village,Evening,60.0,83.0,544.23,4.0,Daniel Lim
+2025-06-08,Holland Village,Midday,41.0,57.0,498.4,3.0,Daniel Lim
+2025-06-08,Holland Village,Morning,62.0,95.0,422.72,4.0,Daniel Lim
+2025-06-08,Marina Bay,Evening,7.0,10.0,64.99,1.0,Priya Nair
+2025-06-08,Marina Bay,Midday,16.0,23.0,177.34,2.0,Priya Nair
+2025-06-08,Marina Bay,Morning,34.0,49.0,214.66,3.0,Priya Nair
+2025-06-08,Raffles Place,Evening,8.0,12.0,67.15,1.0,Aisha Rahman
+2025-06-08,Raffles Place,Midday,16.0,24.0,171.18,2.0,Aisha Rahman
+2025-06-08,Raffles Place,Morning,53.0,76.0,326.81,3.0,Aisha Rahman
+2025-06-08,Tampines Mall,Evening,61.0,90.0,556.13,4.0,Wei Ming Tan
+2025-06-08,Tampines Mall,Midday,78.0,116.0,810.44,5.0,Wei Ming Tan
+2025-06-08,Tampines Mall,Morning,73.0,111.0,477.77,4.0,Wei Ming Tan
+2025-06-09,Holland Village,Evening,51.0,74.0,469.85,3.0,Daniel Lim
+2025-06-09,Holland Village,Midday,50.0,71.0,504.82,3.0,Daniel Lim
+2025-06-09,Holland Village,Morning,71.0,99.0,450.21,4.0,Daniel Lim
+2025-06-09,Marina Bay,Evening,16.0,24.0,150.34,2.0,Priya Nair
+2025-06-09,Marina Bay,Midday,43.0,63.0,452.64,3.0,Priya Nair
+2025-06-09,Marina Bay,Morning,76.0,113.0,462.76,4.0,Priya Nair
+2025-06-09,Raffles Place,Evening,30.0,42.0,278.9,3.0,Aisha Rahman
+2025-06-09,Raffles Place,Midday,90.0,128.0,890.32,5.0,Aisha Rahman
+2025-06-09,Raffles Place,Morning,161.0,233.0,1162.51,6.0,Aisha Rahman
+2025-06-09,Tampines Mall,Evening,44.0,69.0,393.97,3.0,Wei Ming Tan
+2025-06-09,Tampines Mall,Midday,56.0,73.0,572.76,4.0,Wei Ming Tan
+2025-06-09,Tampines Mall,Morning,46.0,68.0,314.13,3.0,Wei Ming Tan
+2025-06-10,Holland Village,Evening,50.0,69.0,472.76,3.0,Daniel Lim
+2025-06-10,Holland Village,Midday,43.0,67.0,442.68,3.0,Daniel Lim
+2025-06-10,Holland Village,Morning,53.0,73.0,343.5,3.0,Daniel Lim
+2025-06-10,Marina Bay,Evening,21.0,29.0,184.9,2.0,Priya Nair
+2025-06-10,Marina Bay,Midday,58.0,89.0,578.38,4.0,Priya Nair
+2025-06-10,Marina Bay,Morning,113.0,147.0,724.33,6.0,Priya Nair
+2025-06-10,Raffles Place,Evening,45.0,66.0,387.58,3.0,Aisha Rahman
+2025-06-10,Raffles Place,Midday,102.0,134.0,1076.37,6.0,Aisha Rahman
+2025-06-10,Raffles Place,Morning,216.0,336.0,1450.74,6.0,Aisha Rahman
+2025-06-10,Tampines Mall,Evening,38.0,53.0,373.22,3.0,Wei Ming Tan
+2025-06-10,Tampines Mall,Midday,41.0,61.0,455.27,3.0,Wei Ming Tan
+2025-06-10,Tampines Mall,Morning,43.0,61.0,266.07,3.0,Wei Ming Tan
+2025-06-11,Holland Village,Evening,54.0,77.0,465.34,3.0,Daniel Lim
+2025-06-11,Holland Village,Midday,43.0,60.0,472.45,3.0,Daniel Lim
+2025-06-11,Holland Village,Morning,55.0,82.0,377.33,3.0,Daniel Lim
+2025-06-11,Marina Bay,Evening,23.0,33.0,221.79,2.0,Priya Nair
+2025-06-11,Marina Bay,Midday,60.0,82.0,635.16,4.0,Priya Nair
+2025-06-11,Marina Bay,Morning,119.0,160.0,767.89,6.0,Priya Nair
+2025-06-11,Raffles Place,Evening,34.0,51.0,319.92,3.0,Aisha Rahman
+2025-06-11,Raffles Place,Midday,87.0,126.0,1006.71,5.0,Aisha Rahman
+2025-06-11,Raffles Place,Morning,174.0,253.0,1152.91,6.0,Aisha Rahman
+2025-06-11,Tampines Mall,Evening,43.0,63.0,395.69,3.0,Wei Ming Tan
+2025-06-11,Tampines Mall,Midday,50.0,68.0,503.07,3.0,Wei Ming Tan
+2025-06-11,Tampines Mall,Morning,44.0,61.0,316.34,3.0,Wei Ming Tan
+2025-06-12,Holland Village,Evening,48.0,67.0,451.53,3.0,Daniel Lim
+2025-06-12,Holland Village,Midday,43.0,67.0,486.14,3.0,Daniel Lim
+2025-06-12,Holland Village,Morning,63.0,95.0,411.46,4.0,Daniel Lim
+2025-06-12,Marina Bay,Evening,23.0,31.0,209.43,2.0,Priya Nair
+2025-06-12,Marina Bay,Midday,65.0,92.0,604.17,4.0,Priya Nair
+2025-06-12,Marina Bay,Morning,101.0,139.0,679.41,6.0,Priya Nair
+2025-06-12,Raffles Place,Evening,26.0,35.0,260.76,2.0,Aisha Rahman
+2025-06-12,Raffles Place,Midday,73.0,76.0,738.61,4.0,Aisha Rahman
+2025-06-12,Raffles Place,Morning,185.0,270.0,1216.38,6.0,Aisha Rahman
+2025-06-12,Tampines Mall,Evening,42.0,60.0,388.42,3.0,Wei Ming Tan
+2025-06-12,Tampines Mall,Midday,61.0,98.0,633.47,4.0,Wei Ming Tan
+2025-06-12,Tampines Mall,Morning,56.0,81.0,383.36,4.0,Wei Ming Tan
+2025-06-13,Holland Village,Evening,65.0,92.0,621.32,4.0,Daniel Lim
+2025-06-13,Holland Village,Midday,59.0,79.0,596.17,4.0,Daniel Lim
+2025-06-13,Holland Village,Morning,83.0,125.0,522.63,5.0,Daniel Lim
+2025-06-13,Marina Bay,Evening,27.0,41.0,253.7,2.0,Priya Nair
+2025-06-13,Marina Bay,Midday,63.0,96.0,662.24,4.0,Priya Nair
+2025-06-13,Marina Bay,Morning,125.0,181.0,462.76,6.0,Priya Nair
+2025-06-13,Raffles Place,Evening,29.0,43.0,271.93,2.0,Aisha Rahman
+2025-06-13,Raffles Place,Midday,78.0,115.0,836.74,5.0,Aisha Rahman
+2025-06-13,Raffles Place,Morning,160.0,230.0,1088.97,6.0,Aisha Rahman
+2025-06-13,Tampines Mall,Evening,43.0,60.0,402.44,3.0,Wei Ming Tan
+2025-06-13,Tampines Mall,Midday,53.0,73.0,593.92,3.0,Wei Ming Tan
+2025-06-13,Tampines Mall,Morning,55.0,71.0,364.67,3.0,Wei Ming Tan
+2025-06-14,Holland Village,Evening,73.0,110.0,648.27,4.0,Daniel Lim
+2025-06-14,Holland Village,Midday,51.0,73.0,562.34,3.0,Daniel Lim
+2025-06-14,Holland Village,Morning,77.0,115.0,501.85,5.0,Daniel Lim
+2025-06-14,Marina Bay,Evening,8.0,11.0,72.07,1.0,Priya Nair
+2025-06-14,Marina Bay,Midday,19.0,27.0,206.15,2.0,Priya Nair
+2025-06-14,Marina Bay,Morning,38.0,53.0,255.93,3.0,Priya Nair
+2025-06-14,Raffles Place,Evening,10.0,14.0,94.41,1.0,Aisha Rahman
+2025-06-14,Raffles Place,Midday,28.0,40.0,278.05,2.0,Aisha Rahman
+2025-06-14,Raffles Place,Morning,67.0,106.0,435.22,4.0,Aisha Rahman
+2025-06-14,Tampines Mall,Evening,53.0,74.0,548.86,3.0,Wei Ming Tan
+2025-06-14,Tampines Mall,Midday,85.0,121.0,874.86,5.0,Wei Ming Tan
+2025-06-14,Tampines Mall,Morning,88.0,119.0,538.93,5.0,Wei Ming Tan
+2025-06-15,Holland Village,Evening,53.0,76.0,490.3,3.0,Daniel Lim
+2025-06-15,Holland Village,Midday,54.0,76.0,576.51,3.0,Daniel Lim
+2025-06-15,Holland Village,Morning,78.0,112.0,464.28,5.0,Daniel Lim
+2025-06-15,Marina Bay,Evening,7.0,10.0,60.08,3.0,Priya Nair
+2025-06-15,Marina Bay,Midday,18.0,27.0,177.08,2.0,Priya Nair
+2025-06-15,Marina Bay,Morning,34.0,51.0,218.23,3.0,Priya Nair
+2025-06-15,Raffles Place,Evening,8.0,12.0,67.6,1.0,Aisha Rahman
+2025-06-15,Raffles Place,Midday,25.0,35.0,261.17,2.0,Aisha Rahman
+2025-06-15,Raffles Place,Morning,57.0,83.0,361.44,4.0,Aisha Rahman
+2025-06-15,Tampines Mall,Evening,75.0,107.0,634.0,4.0,Wei Ming Tan
+2025-06-15,Tampines Mall,Midday,81.0,114.0,851.64,5.0,Wei Ming Tan
+2025-06-15,Tampines Mall,Morning,89.0,135.0,564.53,5.0,Wei Ming Tan
+2025-06-16,Holland Village,Evening,61.0,89.0,579.18,4.0,Daniel Lim
+2025-06-16,Holland Village,Midday,46.0,67.0,462.76,3.0,Daniel Lim
+2025-06-16,Holland Village,Morning,55.0,82.0,418.04,3.0,Daniel Lim
+2025-06-16,Marina Bay,Evening,21.0,30.0,200.63,2.0,Priya Nair
+2025-06-16,Marina Bay,Midday,50.0,73.0,532.76,3.0,Priya Nair
+2025-06-16,Marina Bay,Morning,53.0,134.0,623.12,5.0,Priya Nair
+2025-06-16,Raffles Place,Evening,29.0,38.0,265.38,2.0,Aisha Rahman
+2025-06-16,Raffles Place,Midday,59.0,87.0,656.56,4.0,Aisha Rahman
+2025-06-16,Raffles Place,Morning,157.0,244.0,1064.48,6.0,Aisha Rahman
+2025-06-16,Tampines Mall,Evening,44.0,66.0,391.06,3.0,Wei Ming Tan
+2025-06-16,Tampines Mall,Midday,61.0,84.0,663.37,4.0,Wei Ming Tan
+2025-06-16,Tampines Mall,Morning,57.0,80.0,379.32,4.0,Wei Ming Tan
+2025-06-17,Holland Village,Evening,61.0,88.0,585.11,4.0,Daniel Lim
+2025-06-17,Holland Village,Midday,46.0,67.0,527.9,3.0,Daniel Lim
+2025-06-17,Holland Village,Morning,59.0,82.0,373.49,4.0,Daniel Lim
+2025-06-17,Marina Bay,Evening,16.0,21.0,142.11,2.0,Priya Nair
+2025-06-17,Marina Bay,Midday,39.0,57.0,413.98,3.0,Priya Nair
+2025-06-17,Marina Bay,Morning,77.0,114.0,541.52,5.0,Priya Nair
+2025-06-17,Raffles Place,Evening,38.0,53.0,325.16,3.0,Aisha Rahman
+2025-06-17,Raffles Place,Midday,86.0,130.0,936.03,5.0,Aisha Rahman
+2025-06-17,Raffles Place,Morning,196.0,286.0,1297.88,6.0,Aisha Rahman
+2025-06-17,Tampines Mall,Evening,51.0,73.0,464.17,3.0,Wei Ming Tan
+2025-06-17,Tampines Mall,Midday,55.0,80.0,592.54,3.0,Wei Ming Tan
+2025-06-17,Tampines Mall,Morning,66.0,101.0,402.59,4.0,Wei Ming Tan
+2025-06-18,Holland Village,Evening,50.0,75.0,446.29,3.0,Daniel Lim
+2025-06-18,Holland Village,Midday,42.0,61.0,446.58,3.0,Daniel Lim
+2025-06-18,Holland Village,Morning,60.0,90.0,393.14,4.0,Daniel Lim
+2025-06-18,Marina Bay,Evening,24.0,34.0,228.98,2.0,Priya Nair
+2025-06-18,Marina Bay,Midday,58.0,87.0,576.2,4.0,Priya Nair
+2025-06-18,Marina Bay,Morning,120.0,179.0,772.09,6.0,Priya Nair
+2025-06-18,Raffles Place,Evening,24.0,35.0,222.66,2.0,Aisha Rahman
+2025-06-18,Raffles Place,Midday,69.0,99.0,685.58,4.0,Aisha Rahman
+2025-06-18,Raffles Place,Morning,128.0,190.0,900.61,6.0,Aisha Rahman
+2025-06-18,Tampines Mall,Evening,40.0,61.0,376.49,3.0,Wei Ming Tan
+2025-06-18,Tampines Mall,Midday,51.0,75.0,535.07,3.0,Wei Ming Tan
+2025-06-18,Tampines Mall,Morning,56.0,80.0,354.62,4.0,Wei Ming Tan
+2025-06-19,Holland Village,Evening,50.0,71.0,467.39,3.0,Daniel Lim
+2025-06-19,Holland Village,Midday,39.0,54.0,417.46,3.0,Daniel Lim
+2025-06-19,Holland Village,Morning,75.0,101.0,469.38,4.0,Daniel Lim
+2025-06-19,Marina Bay,Evening,22.0,32.0,198.88,2.0,Priya Nair
+2025-06-19,Marina Bay,Midday,59.0,84.0,610.57,4.0,Priya Nair
+2025-06-19,Marina Bay,Morning,124.0,179.0,774.96,6.0,Priya Nair
+2025-06-19,Raffles Place,Evening,27.0,38.0,259.48,2.0,Aisha Rahman
+2025-06-19,Raffles Place,Midday,76.0,105.0,775.79,4.0,Aisha Rahman
+2025-06-19,Raffles Place,Morning,156.0,236.0,1038.72,6.0,Aisha Rahman
+2025-06-19,Tampines Mall,Evening,35.0,51.0,336.48,3.0,Wei Ming Tan
+2025-06-19,Tampines Mall,Midday,47.0,75.0,523.17,3.0,Wei Ming Tan
+2025-06-19,Tampines Mall,Morning,58.0,75.0,462.76,4.0,Wei Ming Tan
+2025-06-20,Holland Village,Evening,69.0,94.0,587.54,4.0,Daniel Lim
+2025-06-20,Holland Village,Midday,49.0,68.0,532.82,3.0,Daniel Lim
+2025-06-20,Holland Village,Morning,67.0,94.0,467.99,4.0,Daniel Lim
+2025-06-20,Marina Bay,Evening,18.0,26.0,155.08,2.0,Priya Nair
+2025-06-20,Marina Bay,Midday,40.0,57.0,421.62,3.0,Priya Nair
+2025-06-20,Marina Bay,Morning,67.0,96.0,485.09,4.0,Priya Nair
+2025-06-20,Raffles Place,Evening,30.0,45.0,268.35,2.0,Aisha Rahman
+2025-06-20,Raffles Place,Midday,73.0,116.0,765.78,4.0,Aisha Rahman
+2025-06-20,Raffles Place,Morning,160.0,226.0,1087.98,6.0,Aisha Rahman
+2025-06-20,Tampines Mall,Evening,56.0,76.0,530.68,4.0,Wei Ming Tan
+2025-06-20,Tampines Mall,Midday,74.0,111.0,769.71,4.0,Wei Ming Tan
+2025-06-20,Tampines Mall,Morning,72.0,107.0,430.15,4.0,Wei Ming Tan
+2025-06-21,Holland Village,Evening,59.0,84.0,568.38,4.0,Daniel Lim
+2025-06-21,Holland Village,Midday,61.0,86.0,600.36,3.0,Daniel Lim
+2025-06-21,Holland Village,Morning,75.0,109.0,494.44,4.0,Daniel Lim
+2025-06-21,Marina Bay,Evening,10.0,15.0,105.15,1.0,Priya Nair
+2025-06-21,Marina Bay,Midday,26.0,38.0,262.23,2.0,Priya Nair
+2025-06-21,Marina Bay,Morning,51.0,72.0,335.38,3.0,Priya Nair
+2025-06-21,Raffles Place,Evening,10.0,14.0,96.02,1.0,Aisha Rahman
+2025-06-21,Raffles Place,Midday,24.0,35.0,255.81,2.0,Aisha Rahman
+2025-06-21,Raffles Place,Morning,66.0,95.0,416.56,4.0,Aisha Rahman
+2025-06-21,Tampines Mall,Evening,67.0,94.0,592.79,4.0,Wei Ming Tan
+2025-06-21,Tampines Mall,Midday,88.0,134.0,902.08,5.0,Wei Ming Tan
+2025-06-21,Tampines Mall,Morning,53.0,140.0,629.18,5.0,Wei Ming Tan
+2025-06-22,Holland Village,Evening,61.0,86.0,595.04,4.0,Daniel Lim
+2025-06-22,Holland Village,Midday,51.0,79.0,545.08,3.0,Daniel Lim
+2025-06-22,Holland Village,Morning,63.0,92.0,439.45,4.0,Daniel Lim
+2025-06-22,Marina Bay,Evening,9.0,13.0,83.74,1.0,Priya Nair
+2025-06-22,Marina Bay,Midday,19.0,28.0,207.59,2.0,Priya Nair
+2025-06-22,Marina Bay,Morning,53.0,53.0,238.44,3.0,Priya Nair
+2025-06-22,Raffles Place,Evening,9.0,13.0,84.67,1.0,Aisha Rahman
+2025-06-22,Raffles Place,Midday,23.0,34.0,219.71,2.0,Aisha Rahman
+2025-06-22,Raffles Place,Morning,51.0,76.0,347.43,3.0,Aisha Rahman
+2025-06-22,Tampines Mall,Evening,48.0,69.0,456.24,3.0,Wei Ming Tan
+2025-06-22,Tampines Mall,Midday,67.0,103.0,727.14,4.0,Wei Ming Tan
+2025-06-22,Tampines Mall,Morning,63.0,90.0,429.69,4.0,Wei Ming Tan
+2025-06-23,Holland Village,Evening,60.0,91.0,568.43,4.0,Daniel Lim
+2025-06-23,Holland Village,Midday,45.0,69.0,466.62,3.0,Daniel Lim
+2025-06-23,Holland Village,Morning,70.0,101.0,453.22,4.0,Daniel Lim
+2025-06-23,Marina Bay,Evening,22.0,32.0,191.81,2.0,Priya Nair
+2025-06-23,Marina Bay,Midday,50.0,72.0,492.97,3.0,Priya Nair
+2025-06-23,Marina Bay,Morning,104.0,157.0,658.88,6.0,Priya Nair
+2025-06-23,Raffles Place,Evening,28.0,40.0,265.95,2.0,Aisha Rahman
+2025-06-23,Raffles Place,Midday,60.0,79.0,687.93,4.0,Aisha Rahman
+2025-06-23,Raffles Place,Morning,173.0,250.0,1077.39,6.0,Aisha Rahman
+2025-06-23,Tampines Mall,Evening,40.0,60.0,371.0,3.0,Wei Ming Tan
+2025-06-23,Tampines Mall,Midday,50.0,75.0,536.27,3.0,Wei Ming Tan
+2025-06-23,Tampines Mall,Morning,59.0,85.0,372.05,4.0,Wei Ming Tan
+2025-06-24,Holland Village,Evening,51.0,72.0,476.54,3.0,Daniel Lim
+2025-06-24,Holland Village,Midday,43.0,66.0,442.11,3.0,Daniel Lim
+2025-06-24,Holland Village,Morning,63.0,95.0,416.64,4.0,Daniel Lim
+2025-06-24,Marina Bay,Evening,20.0,30.0,172.52,2.0,Priya Nair
+2025-06-24,Marina Bay,Midday,46.0,66.0,463.04,3.0,Priya Nair
+2025-06-24,Marina Bay,Morning,106.0,159.0,699.16,6.0,Priya Nair
+2025-06-24,Raffles Place,Evening,34.0,47.0,314.34,3.0,Aisha Rahman
+2025-06-24,Raffles Place,Midday,91.0,135.0,964.01,5.0,Aisha Rahman
+2025-06-24,Raffles Place,Morning,154.0,232.0,1120.11,6.0,Aisha Rahman
+2025-06-24,Tampines Mall,Evening,36.0,53.0,351.57,3.0,Wei Ming Tan
+2025-06-24,Tampines Mall,Midday,50.0,74.0,501.69,3.0,Wei Ming Tan
+2025-06-24,Tampines Mall,Morning,52.0,76.0,328.28,3.0,Wei Ming Tan
+2025-06-25,Holland Village,Evening,57.0,84.0,495.36,4.0,Daniel Lim
+2025-06-25,Holland Village,Midday,41.0,58.0,462.76,3.0,Daniel Lim
+2025-06-25,Holland Village,Morning,60.0,90.0,401.77,4.0,Daniel Lim
+2025-06-25,Marina Bay,Evening,18.0,26.0,164.25,2.0,Priya Nair
+2025-06-25,Marina Bay,Midday,45.0,67.0,454.13,3.0,Priya Nair
+2025-06-25,Marina Bay,Morning,73.0,101.0,508.69,4.0,Priya Nair
+2025-06-25,Raffles Place,Evening,31.0,46.0,276.03,2.0,Aisha Rahman
+2025-06-25,Raffles Place,Midday,92.0,130.0,926.16,5.0,Aisha Rahman
+2025-06-25,Raffles Place,Morning,192.0,293.0,1232.91,6.0,Aisha Rahman
+2025-06-25,Tampines Mall,Evening,48.0,74.0,432.39,3.0,Wei Ming Tan
+2025-06-25,Tampines Mall,Midday,56.0,79.0,602.17,4.0,Wei Ming Tan
+2025-06-25,Tampines Mall,Morning,52.0,77.0,341.53,3.0,Wei Ming Tan
+2025-06-26,Holland Village,Evening,53.0,76.0,521.9,3.0,Daniel Lim
+2025-06-26,Holland Village,Midday,50.0,68.0,529.96,3.0,Daniel Lim
+2025-06-26,Holland Village,Morning,71.0,99.0,488.1,4.0,Daniel Lim
+2025-06-26,Marina Bay,Evening,24.0,36.0,236.57,2.0,Priya Nair
+2025-06-26,Marina Bay,Midday,57.0,80.0,571.71,4.0,Priya Nair
+2025-06-26,Marina Bay,Morning,96.0,136.0,643.7,5.0,Priya Nair
+2025-06-26,Raffles Place,Evening,34.0,50.0,326.35,3.0,Aisha Rahman
+2025-06-26,Raffles Place,Midday,84.0,76.0,951.36,5.0,Aisha Rahman
+2025-06-26,Raffles Place,Morning,183.0,261.0,1150.17,6.0,Aisha Rahman
+2025-06-26,Tampines Mall,Evening,52.0,82.0,447.82,3.0,Wei Ming Tan
+2025-06-26,Tampines Mall,Midday,53.0,76.0,592.82,3.0,Wei Ming Tan
+2025-06-26,Tampines Mall,Morning,54.0,76.0,350.17,3.0,Wei Ming Tan
+2025-06-27,Holland Village,Evening,73.0,110.0,673.22,4.0,Daniel Lim
+2025-06-27,Holland Village,Midday,56.0,84.0,590.99,4.0,Daniel Lim
+2025-06-27,Holland Village,Morning,88.0,138.0,554.3,5.0,Daniel Lim
+2025-06-27,Marina Bay,Evening,14.0,22.0,137.38,2.0,Priya Nair
+2025-06-27,Marina Bay,Midday,43.0,57.0,452.17,3.0,Priya Nair
+2025-06-27,Marina Bay,Morning,82.0,126.0,513.15,5.0,Priya Nair
+2025-06-27,Raffles Place,Evening,27.0,37.0,246.67,2.0,Aisha Rahman
+2025-06-27,Raffles Place,Midday,81.0,123.0,794.81,5.0,Aisha Rahman
+2025-06-27,Raffles Place,Morning,174.0,246.0,1075.7,6.0,Aisha Rahman
+2025-06-27,Tampines Mall,Evening,63.0,91.0,600.51,4.0,Wei Ming Tan
+2025-06-27,Tampines Mall,Midday,66.0,95.0,734.56,4.0,Wei Ming Tan
+2025-06-27,Tampines Mall,Morning,62.0,89.0,407.68,4.0,Wei Ming Tan
+2025-06-28,Holland Village,Evening,66.0,98.0,462.76,4.0,Daniel Lim
+2025-06-28,Holland Village,Midday,58.0,89.0,626.98,4.0,Daniel Lim
+2025-06-28,Holland Village,Morning,65.0,96.0,443.37,4.0,Daniel Lim
+2025-06-28,Marina Bay,Evening,9.0,13.0,78.77,1.0,Priya Nair
+2025-06-28,Marina Bay,Midday,20.0,29.0,224.61,2.0,Priya Nair
+2025-06-28,Marina Bay,Morning,43.0,64.0,281.75,3.0,Priya Nair
+2025-06-28,Raffles Place,Evening,10.0,15.0,93.26,1.0,Aisha Rahman
+2025-06-28,Raffles Place,Midday,28.0,40.0,275.96,2.0,Aisha Rahman
+2025-06-28,Raffles Place,Morning,52.0,74.0,373.71,3.0,Aisha Rahman
+2025-06-28,Tampines Mall,Evening,46.0,59.0,450.3,3.0,Wei Ming Tan
+2025-06-28,Tampines Mall,Midday,67.0,96.0,698.6,4.0,Wei Ming Tan
+2025-06-28,Tampines Mall,Morning,63.0,93.0,427.25,4.0,Wei Ming Tan
+2025-06-29,Holland Village,Evening,70.0,101.0,629.83,4.0,Daniel Lim
+2025-06-29,Holland Village,Midday,54.0,76.0,588.18,3.0,Daniel Lim
+2025-06-29,Holland Village,Morning,76.0,112.0,511.81,4.0,Daniel Lim
+2025-06-29,Marina Bay,Evening,7.0,10.0,64.2,1.0,Priya Nair
+2025-06-29,Marina Bay,Midday,15.0,22.0,154.99,2.0,Priya Nair
+2025-06-29,Marina Bay,Morning,35.0,52.0,228.34,3.0,Priya Nair
+2025-06-29,Raffles Place,Evening,8.0,12.0,74.12,1.0,Aisha Rahman
+2025-06-29,Raffles Place,Midday,19.0,28.0,219.52,2.0,Aisha Rahman
+2025-06-29,Raffles Place,Morning,51.0,77.0,345.44,3.0,Aisha Rahman
+2025-06-29,Tampines Mall,Evening,51.0,74.0,485.64,3.0,Wei Ming Tan
+2025-06-29,Tampines Mall,Midday,64.0,90.0,679.38,3.0,Wei Ming Tan
+2025-06-29,Tampines Mall,Morning,76.0,113.0,469.82,4.0,Wei Ming Tan
+2025-06-30,Holland Village,Evening,66.0,91.0,619.51,4.0,Daniel Lim
+2025-06-30,Holland Village,Midday,50.0,75.0,515.76,3.0,Daniel Lim
+2025-06-30,Holland Village,Morning,68.0,103.0,455.32,4.0,Daniel Lim
+2025-06-30,Marina Bay,Evening,18.0,26.0,170.03,2.0,Priya Nair
+2025-06-30,Marina Bay,Midday,49.0,73.0,497.02,3.0,Priya Nair
+2025-06-30,Marina Bay,Morning,90.0,135.0,548.02,5.0,Priya Nair
+2025-06-30,Raffles Place,Evening,28.0,41.0,285.72,2.0,Aisha Rahman
+2025-06-30,Raffles Place,Midday,90.0,141.0,927.09,5.0,Aisha Rahman
+2025-06-30,Raffles Place,Morning,180.0,256.0,1160.98,6.0,Aisha Rahman
+2025-06-30,Tampines Mall,Evening,38.0,53.0,343.38,3.0,Wei Ming Tan
+2025-06-30,Tampines Mall,Midday,45.0,68.0,490.74,3.0,Wei Ming Tan
+2025-06-30,Tampines Mall,Morning,47.0,67.0,312.72,3.0,Wei Ming Tan
